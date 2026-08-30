@@ -1,0 +1,19 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"description": "This is the backend for the ecommerce platform shophub",
+	"license": "ISC",
+	"author": "Aaditya , Srijan",
+	"type": "module",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"express": "^5.2.1",
+		"dotenv": "^17.4.2",
+		"mongoose": "^9.9.4"
+	},
+	"devDependencies": {}
+}
