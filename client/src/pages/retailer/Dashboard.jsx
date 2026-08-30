@@ -5,7 +5,12 @@ export default function Dashboard() {
   const [sales, setSales] = useState([]);
 
   useEffect(() => {
-    axios.get('/orders/my-sales').then((res) => setSales(res.data));
+    axios
+      .get('/orders/my-sales', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+      .then((res) => setSales(res.data))
+      .catch(() => setSales([]));
   }, []);
 
   const total = sales.reduce((sum, s) => sum + s.amount, 0);
