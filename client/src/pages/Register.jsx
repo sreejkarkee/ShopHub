@@ -27,7 +27,13 @@ export default function Register() {
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
-        <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
+        <input
+  type="email"
+  required
+  placeholder="Email"
+  value={form.email}
+  onChange={(e) => setForm({ ...form, email: e.target.value })}
+/>
         <input
           name="password"
           type="password"

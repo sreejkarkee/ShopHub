@@ -31,11 +31,13 @@ export default function Login() {
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
+      <input
+  type="email"
+  required
+  placeholder="Email"
+  value={form.email}
+  onChange={(e) => setForm({ ...form, email: e.target.value })}
+/>
         <input
           type="password"
           placeholder="Password"
