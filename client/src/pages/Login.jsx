@@ -1,29 +1,31 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../api/axios';
-import { useAuth } from '../contexts/AuthContext';
-import './Login.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../api/axios";
+import { useAuth } from "../contexts/AuthContext";
+import "./Login.css";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/login', form);
+      const res = await axios.post("/login", form);
       login(res.data);
 
-      // redirect based on role — this is the whole trick
-      if (res.data.role === 'retailer') {
-        navigate('/retailer/dashboard');
+      // redirect based on role
+      if (res.data.role === "retailer") {
+        navigate("/retailer/dashboard");
+      } else if (res.data.role === "admin") {
+        navigate("/admin/dashboard");
       } else {
-        navigate('/products');
+        navigate("/products");
       }
     } catch (err) {
-      setError('Invalid email or password.');
+      setError("Invalid email or password.");
     }
   };
 
@@ -31,13 +33,13 @@ export default function Login() {
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-      <input
-  type="email"
-  required
-  placeholder="Email"
-  value={form.email}
-  onChange={(e) => setForm({ ...form, email: e.target.value })}
-/>
+        <input
+          type="email"
+          required
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+        />
         <input
           type="password"
           placeholder="Password"
@@ -46,7 +48,7 @@ export default function Login() {
         />
         <button type="submit">Login</button>
       </form>
-      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
     </div>
   );
 }

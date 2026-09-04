@@ -9,6 +9,7 @@ import ProductList from './pages/customer/ProductList';
 import Cart from './pages/customer/Cart';
 import Dashboard from './pages/retailer/Dashboard';
 import AddProduct from './pages/retailer/AddProduct';
+import AdminDashboard from './pages/admin/Dashboard';
 
 export default function App() {
   return (
@@ -37,6 +38,12 @@ export default function App() {
           <Route
             path="/retailer/add-product"
             element={<PrivateRoute role="retailer"><AddProduct /></PrivateRoute>}
+          />
+
+          {/* admin side */}
+          <Route
+            path="/admin/dashboard"
+            element={<PrivateRoute role="admin"><AdminDashboard /></PrivateRoute>}
           />
         </Routes>
       </BrowserRouter>
