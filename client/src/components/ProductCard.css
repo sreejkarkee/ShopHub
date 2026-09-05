@@ -90,11 +90,12 @@
 }
 
 .product-card-meta {
-  align-items: center;
+  align-items: flex-start;
   border-bottom: 1px solid #e3e0d8;
   color: #899188;
   display: flex;
   font-size: 10px;
+  gap: 8px;
   justify-content: space-between;
   letter-spacing: 0.07em;
   padding-bottom: 7px;
@@ -103,6 +104,7 @@
 
 .stock-label {
   color: #6d8b61;
+  white-space: nowrap;
 }
 
 .stock-label::before {
@@ -113,6 +115,24 @@
   height: 5px;
   margin: 0 5px 2px 0;
   width: 5px;
+}
+
+.product-card-condition {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+  text-align: right;
+}
+
+.product-card-quality {
+  color: #899188;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .product-card-name {

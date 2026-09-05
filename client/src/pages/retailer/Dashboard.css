@@ -229,6 +229,11 @@
   grid-column: 1 / -1;
 }
 
+.retailer-product-form select[name="condition"],
+.retailer-product-form select[name="quality"] {
+  min-width: 0;
+}
+
 .retailer-product-form textarea {
   min-height: 70px;
   resize: vertical;

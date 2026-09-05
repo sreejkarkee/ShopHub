@@ -3,6 +3,7 @@
 .admin-products h2 { font-family: 'Playfair Display', serif; margin: 0; }
 .admin-product-count { color: #899188; font-size: 12px; }
 .admin-product-form { background: #fbfaf7; border: 1px solid #d9d4ca; display: grid; gap: 12px; grid-template-columns: 1.4fr .6fr .8fr 1fr; margin: 18px 0 22px; padding: 18px; }
+.admin-product-form select[name="condition"], .admin-product-form select[name="quality"] { min-width: 0; }
 .admin-product-form input, .admin-product-form select, .admin-product-form textarea { background: #fff; border: 1px solid #d1d4cb; border-radius: 2px; color: #17211b; min-width: 0; padding: 10px; }
 .admin-product-form textarea { grid-column: 1 / -1; min-height: 72px; resize: vertical; }
 .admin-form-actions { align-items: center; display: flex; gap: 14px; grid-column: 1 / -1; }
