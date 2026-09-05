@@ -21,6 +21,7 @@ export default function App() {
 
   const addToCart = (product) => {
     setCartItems((items) => {
+      if (items.some((item) => String(item._id) === String(product._id))) return items;
       const next = [...items, product];
       localStorage.setItem('cart', JSON.stringify(next));
       return next;
@@ -52,11 +53,11 @@ export default function App() {
           {/* customer side */}
           <Route
             path="/products"
-            element={<PrivateRoute roles={["customer", "retailer", "admin"]}><ProductList onAddToCart={addToCart} /></PrivateRoute>}
+            element={<PrivateRoute roles={["customer", "retailer", "admin"]}><ProductList onAddToCart={addToCart} isInCart={(id) => cartItems.some((item) => String(item._id) === String(id))} /></PrivateRoute>}
           />
           <Route
             path="/products/:productId"
-            element={<PrivateRoute roles={["customer", "retailer", "admin"]}><ProductDetail onAddToCart={addToCart} /></PrivateRoute>}
+            element={<PrivateRoute roles={["customer", "retailer", "admin"]}><ProductDetail onAddToCart={addToCart} isInCart={(id) => cartItems.some((item) => String(item._id) === String(id))} /></PrivateRoute>}
           />
           <Route
             path="/cart"

@@ -4,7 +4,7 @@ import axios from '../../api/axios';
 import { useAuth } from '../../contexts/AuthContext';
 import './ProductDetail.css';
 
-export default function ProductDetail({ onAddToCart }) {
+export default function ProductDetail({ onAddToCart, isInCart }) {
   const { user } = useAuth();
   const canShop = user?.role === 'customer';
   const { productId } = useParams();
@@ -12,7 +12,7 @@ export default function ProductDetail({ onAddToCart }) {
   const navigate = useNavigate();
   const [product, setProduct] = useState(location.state?.product || null);
   const [loading, setLoading] = useState(!location.state?.product);
-  const [added, setAdded] = useState(false);
+  const [added, setAdded] = useState(() => isInCart(product?._id));
   const [reviewRating, setReviewRating] = useState('5');
   const [reviewComment, setReviewComment] = useState('');
   const [reviewError, setReviewError] = useState('');
@@ -28,9 +28,9 @@ export default function ProductDetail({ onAddToCart }) {
   }, [product, productId]);
 
   const handleAdd = () => {
+    if (added || isInCart(product._id)) return;
     onAddToCart(product);
     setAdded(true);
-    window.setTimeout(() => setAdded(false), 1400);
   };
 
   const reviews = Array.isArray(product?.reviews) ? product.reviews : [];
@@ -71,7 +71,7 @@ export default function ProductDetail({ onAddToCart }) {
           <h1>{product.name}</h1>
           <div className="detail-rating">{product.rating ? `${'★'.repeat(Math.round(product.rating))}${'☆'.repeat(5 - Math.round(product.rating))}` : '☆☆☆☆☆'} <small>{product.rating ? Number(product.rating).toFixed(1) : 'No rating'} · {product.reviewCount || reviews.length} reviews</small></div>
           <p className="detail-description">{product.description}</p>
-          <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong>{canShop && <button onClick={handleAdd}>{added ? 'Added to bag ✓' : 'Add to bag →'}</button>}</div>
+          <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong>{canShop && <button onClick={handleAdd} disabled={added || isInCart(product._id)}>{added || isInCart(product._id) ? 'Added to bag ✓' : 'Add to bag →'}</button>}</div>
           <div className="detail-notes"><span>{product.condition || 'New'} · {product.quality || 'New'}</span><span>In stock</span><span>Free delivery over $75</span><span>30-day returns</span></div>
         </div>
       </section>

@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 
-export default function ProductCard({ product, onAddToCart, canShop = true }) {
-  const [added, setAdded] = useState(false);
+export default function ProductCard({ product, onAddToCart, isInCart = false, canShop = true }) {
+  const [added, setAdded] = useState(isInCart);
   const navigate = useNavigate();
   const rating = Number(product.rating || 0);
   const reviewCount = Array.isArray(product.reviews) ? product.reviews.length : Number(product.reviewCount || product.reviews || 0);
   const stars = rating ? `${'★'.repeat(Math.round(rating))}${'☆'.repeat(5 - Math.round(rating))}` : '☆☆☆☆☆';
 
   const handleAdd = () => {
+    if (added || isInCart) return;
     onAddToCart(product);
     setAdded(true);
-    window.setTimeout(() => setAdded(false), 1400);
   };
 
   return (
@@ -31,7 +31,7 @@ export default function ProductCard({ product, onAddToCart, canShop = true }) {
         {product.retailer && <small className="product-card-retailer">By {product.retailer.name || product.retailer.email}</small>}
         <div className="product-card-rating"><span aria-label={rating ? `${rating} out of 5 stars` : 'No ratings yet'}>{stars}</span> <small>{rating ? rating.toFixed(1) : 'No rating'} · {reviewCount} reviews</small></div>
         <p className="product-card-description">{product.description}</p>
-        <div className="product-card-footer"><p className="product-card-price">${Number(product.price).toFixed(2)}</p>{canShop && <button className={added ? 'product-card-btn added' : 'product-card-btn'} onClick={(event) => { event.stopPropagation(); handleAdd(); }} aria-label={`Add ${product.name} to bag`}><span>{added ? 'Added to bag' : 'Add to bag'}</span><span aria-hidden="true">{added ? '✓' : '+'}</span></button>}</div>
+        <div className="product-card-footer"><p className="product-card-price">${Number(product.price).toFixed(2)}</p>{canShop && <button className={added || isInCart ? 'product-card-btn added' : 'product-card-btn'} onClick={(event) => { event.stopPropagation(); handleAdd(); }} aria-label={added || isInCart ? `${product.name} added to bag` : `Add ${product.name} to bag`} disabled={added || isInCart}><span>{added || isInCart ? 'Added to bag' : 'Add to bag'}</span><span aria-hidden="true">{added || isInCart ? '✓' : '+'}</span></button>}</div>
       </div>
     </article>
   );
