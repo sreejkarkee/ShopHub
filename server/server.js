@@ -11,8 +11,11 @@ import { protect, requireRole } from './middleware/auth.js';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+const allowedOrigins = process.env.CLIENT_URL?.split(',').map((origin) => origin.trim()).filter(Boolean);
+app.use(cors({ origin: allowedOrigins?.length ? allowedOrigins : true }));
 app.use(express.json());
+
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 // Connect to database
 dbConnection();
