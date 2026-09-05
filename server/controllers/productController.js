@@ -72,8 +72,11 @@ export const updateProduct = async (req, res) => {
   }
 
   try {
+    const productFilter = req.user.role === 'admin'
+      ? { _id: req.params.id }
+      : { _id: req.params.id, retailer: req.user.id };
     const product = await Product.findByIdAndUpdate(
-      req.params.id,
+      productFilter,
       { name: name.trim(), price: Number(price), description: description.trim(), category, imageUrl },
       { new: true, runValidators: true },
     );
@@ -87,7 +90,10 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const productFilter = req.user.role === 'admin'
+      ? { _id: req.params.id }
+      : { _id: req.params.id, retailer: req.user.id };
+    const product = await Product.findOneAndDelete(productFilter);
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json({ message: 'Product deleted' });
   } catch {

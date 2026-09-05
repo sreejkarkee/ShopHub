@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axios';
 import ProductCard from '../../components/ProductCard';
+import { productCategories } from '../../constants/productCategories';
 import './Dashboard.css';
+
+const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '' };
 
 export default function Dashboard() {
   const [sales, setSales] = useState([]);
   const [products, setProducts] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState(emptyForm);
+  const [message, setMessage] = useState('');
+  const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
 
   useEffect(() => {
     axios
@@ -23,6 +30,35 @@ export default function Dashboard() {
   }, []);
 
   const total = sales.reduce((sum, s) => sum + s.amount, 0);
+  const handleChange = (event) => setForm({ ...form, [event.target.name]: event.target.value });
+  const startEditing = (product) => {
+    setEditingId(product._id);
+    setForm({ name: product.name, price: product.price, description: product.description, category: product.category || 'Essentials', imageUrl: product.imageUrl || '' });
+    setMessage('');
+  };
+  const cancelEditing = () => { setEditingId(null); setForm(emptyForm); };
+  const saveProduct = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await axios.put(`/products/${editingId}`, form, { headers });
+      setProducts((items) => items.map((item) => item._id === editingId ? data : item));
+      cancelEditing();
+      setMessage('Product updated.');
+    } catch (error) {
+      setMessage(error.response?.data?.message || 'Product could not be updated.');
+    }
+  };
+  const removeProduct = async (id) => {
+    if (!window.confirm('Delete this product?')) return;
+    try {
+      await axios.delete(`/products/${id}`, { headers });
+      setProducts((items) => items.filter((item) => item._id !== id));
+      if (editingId === id) cancelEditing();
+      setMessage('Product deleted.');
+    } catch (error) {
+      setMessage(error.response?.data?.message || 'Product could not be deleted.');
+    }
+  };
 
   return (
     <main className="page-shell dashboard-page">
@@ -38,7 +74,16 @@ export default function Dashboard() {
       </ul>
       <section className="retailer-products">
         <div className="dashboard-heading"><div><p className="eyebrow">Your catalog</p><h2>Added products</h2></div><span className="product-count">{products.length} listed</span></div>
-        <div className="retailer-product-grid">{products.map((product) => <ProductCard key={product._id} product={product} canShop={false} />)}</div>
+        {editingId && <form className="retailer-product-form" onSubmit={saveProduct}>
+          <input name="name" placeholder="Product name" value={form.name} onChange={handleChange} required />
+          <input name="price" type="number" min="0" step="0.01" placeholder="Price" value={form.price} onChange={handleChange} required />
+          <select name="category" value={form.category} onChange={handleChange}>{productCategories.map((category) => <option key={category}>{category}</option>)}</select>
+          <input name="imageUrl" type="url" placeholder="Image URL" value={form.imageUrl} onChange={handleChange} />
+          <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
+          <div className="retailer-form-actions"><button type="submit">Save changes</button><button type="button" onClick={cancelEditing}>Cancel</button></div>
+        </form>}
+        {message && <p className="form-success">{message}</p>}
+        <div className="retailer-product-grid">{products.map((product) => <div className="retailer-product-item" key={product._id}><ProductCard product={product} canShop={false} /><div className="retailer-product-actions"><button onClick={() => startEditing(product)}>Edit</button><button onClick={() => removeProduct(product._id)}>Delete</button></div></div>)}</div>
         {!products.length && <p className="sales-empty">You have not added any products yet.</p>}
       </section>
     </main>

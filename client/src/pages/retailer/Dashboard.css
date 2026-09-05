@@ -178,6 +178,77 @@
   gap: 16px;
 }
 
+.retailer-product-item {
+  min-width: 0;
+}
+
+.retailer-product-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 2px 0;
+}
+
+.retailer-product-actions button,
+.retailer-form-actions button {
+  background: transparent;
+  border: 0;
+  color: #9a5b35;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+.retailer-product-actions button:last-child {
+  color: #a13d35;
+}
+
+.retailer-product-form {
+  background: #fbfaf7;
+  border: 1px solid #ded9cf;
+  border-radius: 5px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1.4fr .6fr .8fr 1fr;
+  margin: 0 0 20px;
+  padding: 16px;
+}
+
+.retailer-product-form input,
+.retailer-product-form select,
+.retailer-product-form textarea {
+  background: #fff;
+  border: 1px solid #d1d4cb;
+  border-radius: 3px;
+  color: #17211b;
+  min-width: 0;
+  padding: 10px;
+}
+
+.retailer-product-form textarea,
+.retailer-form-actions {
+  grid-column: 1 / -1;
+}
+
+.retailer-product-form textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.retailer-form-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.retailer-form-actions button:first-child {
+  background: #17211b;
+  color: #f5f2ec;
+  padding: 10px 14px;
+}
+
+.retailer-form-actions button:last-child {
+  color: #6b756e;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 600px) {
   .metric-strip {
@@ -192,5 +263,14 @@
 
   .dashboard-heading a {
     padding-bottom: 0;
+  }
+
+  .retailer-product-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .retailer-product-form input:first-child,
+  .retailer-product-form textarea {
+    grid-column: 1 / -1;
   }
 }
