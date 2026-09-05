@@ -26,7 +26,7 @@ export default function ProductCard({ product, onAddToCart, canShop = true }) {
         )}
       </div>
       <div className="product-card-body">
-        <div className="product-card-meta"><span>{product.category || 'Essentials'}</span><span className="stock-label">In stock</span></div>
+        <div className="product-card-meta"><span>{product.category || 'Essentials'}</span><span className="stock-label">{product.condition || 'New'} · {product.quality || 'New'}</span></div>
         <h3 className="product-card-name">{product.name}</h3>
         {product.retailer && <small className="product-card-retailer">By {product.retailer.name || product.retailer.email}</small>}
         <div className="product-card-rating"><span aria-label={rating ? `${rating} out of 5 stars` : 'No ratings yet'}>{stars}</span> <small>{rating ? rating.toFixed(1) : 'No rating'} · {reviewCount} reviews</small></div>

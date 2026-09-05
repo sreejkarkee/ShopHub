@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axios';
 import { productCategories } from '../../constants/productCategories';
+import { productConditions, productQualities } from '../../constants/productConditions';
 import './Dashboard.css';
 
-const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '' };
+const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '', condition: productConditions[0], quality: productQualities[0] };
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -43,7 +44,7 @@ export default function AdminDashboard() {
       setMessage(error.response?.data?.message || 'Product could not be saved.');
     }
   };
-  const editProduct = (product) => { setEditingId(product._id); setForm({ name: product.name, price: product.price, description: product.description, category: product.category || 'Essentials', imageUrl: product.imageUrl || '' }); setMessage(''); };
+  const editProduct = (product) => { setEditingId(product._id); setForm({ name: product.name, price: product.price, description: product.description, category: product.category || 'Essentials', imageUrl: product.imageUrl || '', condition: product.condition || 'New', quality: product.quality || 'New' }); setMessage(''); };
   const deleteProduct = async (id) => {
     if (!window.confirm('Delete this product?')) return;
     try { await axios.delete(`/products/${id}`, { headers }); setProducts((items) => items.filter((item) => item._id !== id)); setMessage('Product deleted.'); } catch (error) { setMessage(error.response?.data?.message || 'Product could not be deleted.'); }
@@ -70,12 +71,14 @@ export default function AdminDashboard() {
           <input name="name" placeholder="Product name" value={form.name} onChange={handleChange} required />
           <input name="price" type="number" min="0" step="0.01" placeholder="Price" value={form.price} onChange={handleChange} required />
           <select name="category" value={form.category} onChange={handleChange}>{productCategories.map((category) => <option key={category}>{category}</option>)}</select>
+          <select name="condition" value={form.condition} onChange={handleChange}>{productConditions.map((condition) => <option key={condition}>{condition}</option>)}</select>
+          <select name="quality" value={form.quality} onChange={handleChange}>{productQualities.map((quality) => <option key={quality}>{quality}</option>)}</select>
           <input name="imageUrl" type="url" placeholder="Image URL" value={form.imageUrl} onChange={handleChange} />
           <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
           <div className="admin-form-actions"><button type="submit">{editingId ? 'Save changes' : 'Create product'} <span>→</span></button>{editingId && <button type="button" className="admin-cancel" onClick={() => { setEditingId(null); setForm(emptyForm); }}>Cancel</button>}</div>
         </form>
         {message && <p className="form-success">{message}</p>}
-        <div className="admin-product-list">{products.map((product) => <article className="admin-product-row" key={product._id}><div>{product.imageUrl && <img src={product.imageUrl} alt="" />}<div><strong>{product.name}</strong><small>{product.category} · ${Number(product.price).toFixed(2)}</small><small className="admin-product-creator">Added by: {product.retailer?.name || product.retailer?.email || 'Admin'}{product.retailer?.role && ` (${product.retailer.role})`}</small></div></div><div className="admin-product-actions"><button onClick={() => editProduct(product)}>Edit</button><button onClick={() => deleteProduct(product._id)}>Delete</button></div></article>)}{!products.length && <p className="sales-empty">No server products available.</p>}</div>
+        <div className="admin-product-list">{products.map((product) => <article className="admin-product-row" key={product._id}><div>{product.imageUrl && <img src={product.imageUrl} alt="" />}<div><strong>{product.name}</strong><small>{product.category} · {product.condition || 'New'} · {product.quality || 'New'} · ${Number(product.price).toFixed(2)}</small><small className="admin-product-creator">Added by: {product.retailer?.name || product.retailer?.email || 'Admin'}{product.retailer?.role && ` (${product.retailer.role})`}</small></div></div><div className="admin-product-actions"><button onClick={() => editProduct(product)}>Edit</button><button onClick={() => deleteProduct(product._id)}>Delete</button></div></article>)}{!products.length && <p className="sales-empty">No server products available.</p>}</div>
       </section>
       <section className="admin-users">
         <div className="dashboard-heading"><div><p className="eyebrow">Account control</p><h2>Users</h2></div><span className="admin-product-count">{users.length} accounts</span></div>

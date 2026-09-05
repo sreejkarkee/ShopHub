@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from '../../api/axios';
 import ProductCard from '../../components/ProductCard';
 import { productCategories } from '../../constants/productCategories';
+import { productConditions, productQualities } from '../../constants/productConditions';
 import './Dashboard.css';
 
-const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '' };
+const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '', condition: productConditions[0], quality: productQualities[0] };
 
 export default function Dashboard() {
   const [sales, setSales] = useState([]);
@@ -33,7 +34,7 @@ export default function Dashboard() {
   const handleChange = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const startEditing = (product) => {
     setEditingId(product._id);
-    setForm({ name: product.name, price: product.price, description: product.description, category: product.category || 'Essentials', imageUrl: product.imageUrl || '' });
+    setForm({ name: product.name, price: product.price, description: product.description, category: product.category || 'Essentials', imageUrl: product.imageUrl || '', condition: product.condition || 'New', quality: product.quality || 'New' });
     setMessage('');
   };
   const cancelEditing = () => { setEditingId(null); setForm(emptyForm); };
@@ -78,6 +79,8 @@ export default function Dashboard() {
           <input name="name" placeholder="Product name" value={form.name} onChange={handleChange} required />
           <input name="price" type="number" min="0" step="0.01" placeholder="Price" value={form.price} onChange={handleChange} required />
           <select name="category" value={form.category} onChange={handleChange}>{productCategories.map((category) => <option key={category}>{category}</option>)}</select>
+          <select name="condition" value={form.condition} onChange={handleChange}>{productConditions.map((condition) => <option key={condition}>{condition}</option>)}</select>
+          <select name="quality" value={form.quality} onChange={handleChange}>{productQualities.map((quality) => <option key={quality}>{quality}</option>)}</select>
           <input name="imageUrl" type="url" placeholder="Image URL" value={form.imageUrl} onChange={handleChange} />
           <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
           <div className="retailer-form-actions"><button type="submit">Save changes</button><button type="button" onClick={cancelEditing}>Cancel</button></div>

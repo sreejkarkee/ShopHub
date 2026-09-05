@@ -13,6 +13,8 @@ const productSchema = new mongoose.Schema({
   description: { type: String, required: true, trim: true },
   category: { type: String, default: 'Essentials', trim: true },
   imageUrl: { type: String, default: '' },
+  condition: { type: String, enum: ['New', 'Used'], default: 'New' },
+  quality: { type: String, enum: ['New', 'Like New', 'Very Good', 'Good', 'Acceptable'], default: 'New' },
   retailer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   rating: { type: Number, default: 0, min: 0, max: 5 },
   reviewCount: { type: Number, default: 0, min: 0 },

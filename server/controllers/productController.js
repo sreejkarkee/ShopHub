@@ -49,7 +49,7 @@ export const addReview = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { name, price, description, category = 'Essentials', imageUrl = '' } = req.body;
+  const { name, price, description, category = 'Essentials', imageUrl = '', condition = 'New', quality = 'New' } = req.body;
   if (!name?.trim() || !description?.trim() || !Number.isFinite(Number(price)) || Number(price) < 0) {
     return res.status(400).json({ message: 'Name, description, and a valid price are required' });
   }
@@ -57,7 +57,7 @@ export const createProduct = async (req, res) => {
   try {
     const product = await Product.create({
       name: name.trim(), description: description.trim(), category, imageUrl,
-      price: Number(price), retailer: req.user.role === 'admin' ? undefined : req.user.id,
+      price: Number(price), condition, quality, retailer: req.user.role === 'admin' ? undefined : req.user.id,
     });
     res.status(201).json(product);
   } catch {
@@ -66,7 +66,7 @@ export const createProduct = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-  const { name, price, description, category = 'Essentials', imageUrl = '' } = req.body;
+  const { name, price, description, category = 'Essentials', imageUrl = '', condition = 'New', quality = 'New' } = req.body;
   if (!name?.trim() || !description?.trim() || !Number.isFinite(Number(price)) || Number(price) < 0) {
     return res.status(400).json({ message: 'Name, description, and a valid price are required' });
   }
@@ -77,7 +77,7 @@ export const updateProduct = async (req, res) => {
       : { _id: req.params.id, retailer: req.user.id };
     const product = await Product.findByIdAndUpdate(
       productFilter,
-      { name: name.trim(), price: Number(price), description: description.trim(), category, imageUrl },
+      { name: name.trim(), price: Number(price), description: description.trim(), category, imageUrl, condition, quality },
       { new: true, runValidators: true },
     );
     if (!product) return res.status(404).json({ message: 'Product not found' });
