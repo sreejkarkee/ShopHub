@@ -2,7 +2,9 @@ import Product from '../models/Product.js';
 
 export const listProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find()
+      .populate('retailer', 'name email role')
+      .sort({ createdAt: -1 });
     res.json(products);
   } catch {
     res.status(500).json({ message: 'Unable to load products' });

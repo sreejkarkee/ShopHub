@@ -16,6 +16,7 @@
 .admin-product-row strong, .admin-product-row small { display: block; }
 .admin-product-row strong { color: #17211b; }
 .admin-product-row small { color: #899188; font-size: 12px; margin-top: 4px; }
+.admin-product-row .admin-product-creator { color: #6d8b61; }
 .admin-product-actions { display: flex; gap: 12px; }
 .admin-product-actions button { background: transparent; border: 0; color: #9a5b35; font-size: 12px; padding: 6px 0; }
 .admin-user-list { border-top: 1px solid #d9d4ca; margin-top: 18px; }

@@ -26,7 +26,7 @@ export default function Navbar() {
           </>
         )}
 
-        {(user?.role === 'customer' || user?.role === 'retailer') && (
+        {(user?.role === 'customer' || user?.role === 'retailer' || user?.role === 'admin') && (
           <>
             <Link className={location.pathname === '/products' ? 'active' : ''} to="/products">Discover</Link>
             {user.role === 'customer' && (
@@ -40,6 +40,10 @@ export default function Navbar() {
             <Link className={location.pathname === '/retailer/dashboard' ? 'active' : ''} to="/retailer/dashboard">Overview</Link>
             <Link className={location.pathname === '/retailer/add-product' ? 'active' : ''} to="/retailer/add-product">Add product</Link>
           </>
+        )}
+
+        {user?.role === 'admin' && (
+          <Link className={location.pathname === '/admin/dashboard' ? 'active' : ''} to="/admin/dashboard">Admin dashboard</Link>
         )}
 
         {user && (
