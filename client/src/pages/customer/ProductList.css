@@ -1,0 +1,229 @@
+.page-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: #17211b;
+}
+
+/* ---------- Intro header ---------- */
+.catalog-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid #e3e0d8;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9a5b35;
+  margin: 0 0 12px;
+}
+
+.catalog-intro h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 600;
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: #17211b;
+}
+
+.intro-copy {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #6b756e;
+  max-width: 440px;
+  margin: 0;
+}
+
+.catalog-note {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  flex-shrink: 0;
+  padding-left: 20px;
+  border-left: 1px solid #e3e0d8;
+}
+
+.catalog-note strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 38px;
+  font-weight: 600;
+  color: #9a5b35;
+  line-height: 1;
+}
+
+.catalog-note span {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #899188;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ---------- Benefits row ---------- */
+.shop-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.shop-benefits span {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6d8b61;
+  background: #f1f4ee;
+  border: 1px solid #dde5d6;
+  border-radius: 20px;
+  padding: 7px 14px;
+}
+
+/* ---------- Toolbar: search + filters ---------- */
+.catalog-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fbfaf7;
+  border: 1px solid #ded9cf;
+  border-radius: 6px;
+  padding: 10px 14px;
+  flex: 1 1 240px;
+  max-width: 320px;
+}
+
+.search-field span {
+  color: #899188;
+  font-size: 15px;
+}
+
+.search-field input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  color: #17211b;
+  width: 100%;
+}
+
+.search-field input::placeholder {
+  color: #a3a89e;
+}
+
+.filter-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter {
+  border: 1px solid #ded9cf;
+  background: #fffefa;
+  color: #6b756e;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.filter:hover {
+  border-color: #9a5b35;
+  color: #17211b;
+}
+
+.filter.active {
+  background: #17211b;
+  border-color: #17211b;
+  color: #f5f2ec;
+}
+
+/* ---------- Results row ---------- */
+.results-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid #e3e0d8;
+  border-bottom: 1px solid #e3e0d8;
+  margin-bottom: 32px;
+}
+
+.results-row strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #17211b;
+}
+
+.results-row span {
+  font-size: 12px;
+  color: #899188;
+  font-style: italic;
+}
+
+/* ---------- Empty state ---------- */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #6b756e;
+}
+
+.empty-state h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: #17211b;
+  margin: 0 0 8px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 700px) {
+  .catalog-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .catalog-note {
+    align-items: flex-start;
+    text-align: left;
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid #e3e0d8;
+    padding-top: 16px;
+    width: 100%;
+  }
+
+  .catalog-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-field {
+    max-width: none;
+  }
+}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from '../../api/axios';
+import './AddProduct.css';
 
 export default function AddProduct() {
   const [form, setForm] = useState({ name: '', price: '', description: '', category: 'Essentials', imageUrl: '' });

@@ -1,0 +1,233 @@
+.form-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: #17211b;
+}
+
+.form-page .eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9a5b35;
+  margin: 0 0 12px;
+}
+
+.form-page h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 600;
+  line-height: 1.12;
+  margin: 0 0 14px;
+}
+
+.form-page .intro-copy {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #6b756e;
+  max-width: 460px;
+  margin: 0 0 36px;
+}
+
+/* ---------- Layout ---------- */
+.listing-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ---------- Form ---------- */
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: #fffefa;
+  border: 1px solid #ded9cf;
+  border-radius: 8px;
+  padding: 28px;
+}
+
+.product-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #6b756e;
+}
+
+.product-form input,
+.product-form select,
+.product-form textarea {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #17211b;
+  background: #fbfaf7;
+  border: 1px solid #ded9cf;
+  border-radius: 5px;
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color 0.18s ease;
+}
+
+.product-form input:focus,
+.product-form select:focus,
+.product-form textarea:focus {
+  border-color: #9a5b35;
+}
+
+.product-form textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.product-form button {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #17211b;
+  color: #f5f2ec;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.product-form button:hover {
+  background: #3c5140;
+}
+
+.product-form button:active {
+  transform: translateY(1px);
+}
+
+.product-form button span {
+  color: #d99a67;
+  font-size: 16px;
+  line-height: 0.7;
+}
+
+/* ---------- Preview ---------- */
+.product-preview {
+  position: sticky;
+  top: 24px;
+  background: #f1f4ee;
+  border: 1px solid #dde5d6;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preview-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #899188;
+  margin: 0 0 4px;
+}
+
+.preview-image {
+  width: 100%;
+  aspect-ratio: 1 / 0.85;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #dfe7da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-image span {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  color: #778574;
+}
+
+.preview-category {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a5b35;
+}
+
+.product-preview h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: #17211b;
+}
+
+.product-preview p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b756e;
+  margin: 0;
+}
+
+.product-preview strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: #9a5b35;
+  margin-top: 4px;
+}
+
+/* ---------- Success message ---------- */
+.form-success {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: #f1f4ee;
+  border: 1px solid #dde5d6;
+  border-radius: 5px;
+  color: #6d8b61;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 800px) {
+  .listing-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .product-preview {
+    position: static;
+    order: -1;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

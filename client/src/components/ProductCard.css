@@ -1,3 +1,11 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 240px));
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
 .product-card {
   animation: card-in 0.45s ease both;
   background: #fffefa;
@@ -9,6 +17,7 @@
   overflow: hidden;
   padding: 0;
   transition: box-shadow 0.22s ease, transform 0.22s ease;
+  cursor: pointer;
 }
 
 .product-card:hover {
@@ -24,7 +33,7 @@
 
 .product-card-image {
   align-items: center;
-  aspect-ratio: 1 / 0.86;
+  aspect-ratio: 1 / 0.8;
   background: #dfe7da;
   display: flex;
   justify-content: center;
@@ -54,7 +63,7 @@
 .product-card-placeholder {
   color: #778574;
   font-family: 'Playfair Display', serif;
-  font-size: 4.5rem;
+  font-size: 3rem;
 }
 
 .product-badge {
@@ -77,8 +86,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  min-height: 178px;
-  padding: 12px 13px 12px;
+  padding: 9px 10px 9px;
 }
 
 .product-card-meta {
@@ -110,7 +118,7 @@
 .product-card-name {
   color: #17211b;
   font-family: 'Playfair Display', serif;
-  font-size: 17px;
+  font-size: clamp(14px, 1.4vw, 16px);
   font-weight: 600;
   line-height: 1.16;
   margin: 10px 0 6px;
@@ -136,7 +144,11 @@
   flex: 1;
   font-size: 12px;
   line-height: 1.45;
-  margin: 7px 0 11px;
+  margin: 6px 0 9px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .product-card-footer {
@@ -145,12 +157,12 @@
   display: flex;
   gap: 10px;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 7px;
 }
 
 .product-card-price {
   color: #9a5b35;
-  font-size: 16px;
+  font-size: clamp(14px, 1.3vw, 16px);
   font-weight: 700;
   margin: 0;
 }
@@ -165,14 +177,17 @@
   font-size: 11px;
   gap: 13px;
   justify-content: space-between;
-  padding: 10px 11px;
+  padding: 7px 9px;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .product-card-btn:hover {
   background: #3c5140;
 }
-.product-card-btn.added { background: #5d7656; }
+
+.product-card-btn.added {
+  background: #5d7656;
+}
 
 .product-card-btn:active {
   transform: translateY(1px);
@@ -190,12 +205,13 @@
 }
 
 @media (max-width: 480px) {
-  .product-card-body {
-    min-height: 184px;
-    padding: 11px 10px 10px;
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px;
   }
-  .product-card-name {
-    font-size: 15px;
+  .product-card-body {
+    padding: 11px 10px 10px;
   }
   .product-card-btn {
     font-size: 10px;

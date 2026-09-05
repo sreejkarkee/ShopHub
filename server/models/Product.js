@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema({
   description: { type: String, required: true, trim: true },
   category: { type: String, default: 'Essentials', trim: true },
   imageUrl: { type: String, default: '' },
-  retailer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  retailer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
 
 export default mongoose.model('Product', productSchema);

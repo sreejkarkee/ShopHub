@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductList from './pages/customer/ProductList';
+import ProductDetail from './pages/customer/ProductDetail';
 import Cart from './pages/customer/Cart';
 import Dashboard from './pages/retailer/Dashboard';
 import AddProduct from './pages/retailer/AddProduct';
@@ -52,6 +53,10 @@ export default function App() {
           <Route
             path="/products"
             element={<PrivateRoute role="customer"><ProductList onAddToCart={addToCart} /></PrivateRoute>}
+          />
+          <Route
+            path="/products/:productId"
+            element={<PrivateRoute role="customer"><ProductDetail onAddToCart={addToCart} /></PrivateRoute>}
           />
           <Route
             path="/cart"

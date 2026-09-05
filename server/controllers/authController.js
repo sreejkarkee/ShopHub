@@ -55,3 +55,27 @@ export const login = async (req, res) => {
 
   res.json({ token, role: user.role, name: user.name });
 };
+
+export const listUsers = async (req, res) => {
+  try {
+    const users = await User.find({ role: { $in: ['customer', 'retailer'] } })
+      .select('name email role createdAt')
+      .sort({ createdAt: -1 });
+    res.json(users);
+  } catch {
+    res.status(500).json({ message: 'Unable to load users' });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({
+      _id: req.params.id,
+      role: { $in: ['customer', 'retailer'] },
+    });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'User removed' });
+  } catch {
+    res.status(400).json({ message: 'User could not be removed' });
+  }
+};

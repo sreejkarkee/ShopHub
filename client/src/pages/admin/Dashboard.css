@@ -1,0 +1,27 @@
+.admin-products { margin-top: 54px; }
+.admin-users { margin-top: 54px; }
+.admin-products h2 { font-family: 'Playfair Display', serif; margin: 0; }
+.admin-product-count { color: #899188; font-size: 12px; }
+.admin-product-form { background: #fbfaf7; border: 1px solid #d9d4ca; display: grid; gap: 12px; grid-template-columns: 1.4fr .6fr .8fr 1fr; margin: 18px 0 22px; padding: 18px; }
+.admin-product-form input, .admin-product-form select, .admin-product-form textarea { background: #fff; border: 1px solid #d1d4cb; border-radius: 2px; color: #17211b; min-width: 0; padding: 10px; }
+.admin-product-form textarea { grid-column: 1 / -1; min-height: 72px; resize: vertical; }
+.admin-form-actions { align-items: center; display: flex; gap: 14px; grid-column: 1 / -1; }
+.admin-form-actions button { background: #17211b; border: 0; color: #f5f2ec; padding: 11px 14px; }
+.admin-form-actions button span { color: #d99a67; margin-left: 18px; }
+.admin-form-actions .admin-cancel { background: transparent; color: #6b756e; }
+.admin-product-list { border-top: 1px solid #d9d4ca; }
+.admin-product-row { align-items: center; border-bottom: 1px solid #d9d4ca; display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; }
+.admin-product-row > div:first-child { align-items: center; display: flex; gap: 12px; min-width: 0; }
+.admin-product-row img { height: 42px; object-fit: cover; width: 42px; }
+.admin-product-row strong, .admin-product-row small { display: block; }
+.admin-product-row strong { color: #17211b; }
+.admin-product-row small { color: #899188; font-size: 12px; margin-top: 4px; }
+.admin-product-actions { display: flex; gap: 12px; }
+.admin-product-actions button { background: transparent; border: 0; color: #9a5b35; font-size: 12px; padding: 6px 0; }
+.admin-user-list { border-top: 1px solid #d9d4ca; margin-top: 18px; }
+.admin-user-row { align-items: center; border-bottom: 1px solid #d9d4ca; display: flex; justify-content: space-between; padding: 12px 0; }
+.admin-user-row strong, .admin-user-row small { display: block; }
+.admin-user-row strong { color: #17211b; }
+.admin-user-row small { color: #899188; font-size: 12px; margin-top: 4px; }
+.admin-user-row button { background: transparent; border: 0; color: #a13d35; font-size: 12px; padding: 6px 0; }
+@media (max-width: 700px) { .admin-product-form { grid-template-columns: 1fr 1fr; }.admin-product-form input:first-child, .admin-product-form textarea { grid-column: 1 / -1; }.admin-product-row { align-items: start; flex-direction: column; }.admin-product-actions { align-self: end; } }

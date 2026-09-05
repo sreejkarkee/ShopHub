@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import axios from '../../api/axios';
 import ProductCard from '../../components/ProductCard';
+import './ProductList.css';
 
 const starterProducts = [
   { _id: 'starter-1', name: 'Everyday Canvas Tote', price: 34, category: 'Accessories', description: 'A durable carry-all made for days in motion.', badge: 'Bestseller', rating: 4.8, reviews: 124, imageUrl: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?auto=format&fit=crop&w=700&q=80' },

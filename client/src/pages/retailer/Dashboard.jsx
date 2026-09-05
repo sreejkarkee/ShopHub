@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axios';
+import './Dashboard.css';
 
 export default function Dashboard() {
   const [sales, setSales] = useState([]);

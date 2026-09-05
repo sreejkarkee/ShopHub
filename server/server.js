@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { register, login } from './controllers/authController.js';
+import { deleteUser, listUsers, login, register } from './controllers/authController.js';
 import dbConnection from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
@@ -26,6 +26,8 @@ app.post('/api/login', login);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.get('/api/admin/stats', protect, requireRole('admin'), adminStats);
+app.get('/api/admin/users', protect, requireRole('admin'), listUsers);
+app.delete('/api/admin/users/:id', protect, requireRole('admin'), deleteUser);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
