@@ -2,17 +2,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #1e293b;
-  color: white;
+  padding: 20px max(24px, calc((100% - 1180px) / 2));
+  background-color: #17211b;
+  color: #f5f2ec;
 }
 
 .navbar-brand {
-  font-size: 1.4rem;
+  align-items: center;
+  display: flex;
+  gap: 9px;
+  font-size: 1.25rem;
   font-weight: 700;
   color: white;
   text-decoration: none;
 }
+.brand-mark { align-items: center; background: #d99a67; border-radius: 50%; color: #17211b; display: inline-flex; font-family: 'Playfair Display', serif; height: 28px; justify-content: center; width: 28px; }
 
 .navbar-links {
   display: flex;
@@ -21,25 +25,25 @@
 }
 
 .navbar-links a {
-  color: #e2e8f0;
+  color: #bec7be;
   text-decoration: none;
   font-size: 0.95rem;
 }
+.navbar-links a.active, .navbar-links a:hover { color: #f5f2ec; }
 
 .navbar-links a:hover {
   color: #38bdf8;
 }
 
 .navbar-logout {
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.9rem;
+  background: transparent;
+  color: #d99a67;
+  border: 1px solid #536057;
+  padding: 0.45rem 0.9rem;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
 }
 
-.navbar-logout:hover {
-  background-color: #dc2626;
-}
+.navbar-logout:hover { border-color: #d99a67; }
+@media (max-width: 560px) { .navbar { padding: 16px; } .navbar-links { gap: 10px; } .navbar-links a { font-size: 12px; } }

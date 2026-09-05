@@ -14,13 +14,10 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div>
-      <h2>Admin Dashboard</h2>
-      {stats ? (
-        <p>Total sales: ${stats.totalSales}</p>
-      ) : (
-        <p>Loading or unauthorized.</p>
-      )}
-    </div>
+    <main className="page-shell dashboard-page">
+      <p className="eyebrow">ShopHub operations</p><h1>Keep the marketplace moving.</h1>
+      <section className="metric-strip"><div><span>Total sales</span><strong>${stats?.totalSales || '—'}</strong></div><div><span>Access</span><strong>Admin</strong></div><div><span>System</span><strong className="status-dot">Online</strong></div></section>
+      {!stats && <p className="form-hint">Live metrics will appear when the admin service is connected.</p>}
+    </main>
   );
 }

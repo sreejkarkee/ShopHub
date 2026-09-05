@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
@@ -12,22 +13,49 @@ import AddProduct from './pages/retailer/AddProduct';
 import AdminDashboard from './pages/admin/Dashboard';
 
 export default function App() {
+  const [cartItems, setCartItems] = useState(() => {
+    const saved = localStorage.getItem('cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const addToCart = (product) => {
+    setCartItems((items) => {
+      const next = [...items, product];
+      localStorage.setItem('cart', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const removeFromCart = (index) => {
+    setCartItems((items) => {
+      const next = items.filter((_, itemIndex) => itemIndex !== index);
+      localStorage.setItem('cart', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const clearCart = () => {
+    localStorage.removeItem('cart');
+    setCartItems([]);
+  };
+
   return (
     <AuthProvider>
       <BrowserRouter>
         <Navbar />
         <Routes>
+          <Route path="/" element={<Navigate to="/products" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* customer side */}
           <Route
             path="/products"
-            element={<PrivateRoute role="customer"><ProductList /></PrivateRoute>}
+            element={<PrivateRoute role="customer"><ProductList onAddToCart={addToCart} /></PrivateRoute>}
           />
           <Route
             path="/cart"
-            element={<PrivateRoute role="customer"><Cart /></PrivateRoute>}
+            element={<PrivateRoute role="customer"><Cart cartItems={cartItems} onRemove={removeFromCart} onCheckout={clearCart} /></PrivateRoute>}
           />
 
           {/* retailer side */}

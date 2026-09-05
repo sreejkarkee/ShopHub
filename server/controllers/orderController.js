@@ -1,0 +1,48 @@
+import Order from '../models/Order.js';
+import Product from '../models/Product.js';
+
+export const createOrder = async (req, res) => {
+  const { productIds } = req.body;
+  if (!Array.isArray(productIds) || productIds.length === 0) {
+    return res.status(400).json({ message: 'Your cart is empty' });
+  }
+
+  try {
+    const products = await Product.find({ _id: { $in: productIds } });
+    if (products.length !== productIds.length) {
+      return res.status(400).json({ message: 'One or more products are unavailable' });
+    }
+    const items = products.map((product) => ({
+      product: product._id,
+      retailer: product.retailer,
+      productName: product.name,
+      amount: product.price,
+    }));
+    const total = items.reduce((sum, item) => sum + item.amount, 0);
+    const order = await Order.create({ customer: req.user.id, items, total });
+    res.status(201).json(order);
+  } catch {
+    res.status(400).json({ message: 'Order could not be placed' });
+  }
+};
+
+export const retailerSales = async (req, res) => {
+  try {
+    const orders = await Order.find({ 'items.retailer': req.user.id }).sort({ createdAt: -1 });
+    const sales = orders.flatMap((order) => order.items
+      .filter((item) => item.retailer.toString() === req.user.id)
+      .map((item) => ({ _id: `${order._id}-${item._id}`, productName: item.productName, amount: item.amount, status: order.status })));
+    res.json(sales);
+  } catch {
+    res.status(500).json({ message: 'Unable to load sales' });
+  }
+};
+
+export const adminStats = async (req, res) => {
+  try {
+    const result = await Order.aggregate([{ $match: { status: { $ne: 'cancelled' } } }, { $group: { _id: null, totalSales: { $sum: '$total' } } }]);
+    res.json({ totalSales: result[0]?.totalSales || 0 });
+  } catch {
+    res.status(500).json({ message: 'Unable to load stats' });
+  }
+};

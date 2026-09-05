@@ -30,25 +30,14 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
+    <div className="auth-layout"><div className="auth-aside"><p className="eyebrow">Welcome back</p><h1>Good things,<br />well chosen.</h1><p>Shop independent. Keep the everyday considered.</p></div><div className="login-container">
+      <p className="eyebrow">Your account</p><h2>Sign in to ShopHub</h2><p className="form-hint">Pick up where you left off.</p>
       <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          required
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-        />
-        <button type="submit">Login</button>
+        <label>Email<input type="email" required placeholder="you@example.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
+        <label>Password<input type="password" placeholder="Your password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></label>
+        <button type="submit">Continue <span aria-hidden="true">→</span></button>
       </form>
-      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-    </div>
+      {error && <p className="form-error">{error}</p>}<p className="form-footer">New to ShopHub? <a href="/register">Create an account</a></p>
+    </div></div>
   );
-}
+} 
