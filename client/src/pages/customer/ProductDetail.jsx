@@ -13,6 +13,10 @@ export default function ProductDetail({ onAddToCart }) {
   const [product, setProduct] = useState(location.state?.product || null);
   const [loading, setLoading] = useState(!location.state?.product);
   const [added, setAdded] = useState(false);
+  const [reviewRating, setReviewRating] = useState('5');
+  const [reviewComment, setReviewComment] = useState('');
+  const [reviewError, setReviewError] = useState('');
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
 
   useEffect(() => {
     if (product) return undefined;
@@ -27,6 +31,27 @@ export default function ProductDetail({ onAddToCart }) {
     onAddToCart(product);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
+  };
+
+  const reviews = Array.isArray(product?.reviews) ? product.reviews : [];
+  const submitReview = async (event) => {
+    event.preventDefault();
+    setReviewSubmitting(true);
+    setReviewError('');
+    try {
+      const { data } = await axios.post(`/products/${productId}/reviews`, {
+        rating: Number(reviewRating),
+        comment: reviewComment,
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setProduct(data.product);
+      setReviewComment('');
+    } catch (error) {
+      setReviewError(error.response?.data?.message || 'Review could not be added.');
+    } finally {
+      setReviewSubmitting(false);
+    }
   };
 
   if (loading) return <main className="page-shell detail-state">Loading product...</main>;
@@ -44,11 +69,21 @@ export default function ProductDetail({ onAddToCart }) {
         <div className="detail-copy">
           <p className="eyebrow">{product.category || 'Essentials'}</p>
           <h1>{product.name}</h1>
-          <div className="detail-rating">★ ★ ★ ★ ★ <small>{product.rating || '4.7'} · {product.reviews || 0} reviews</small></div>
+          <div className="detail-rating">{product.rating ? `${'★'.repeat(Math.round(product.rating))}${'☆'.repeat(5 - Math.round(product.rating))}` : '☆☆☆☆☆'} <small>{product.rating ? Number(product.rating).toFixed(1) : 'No rating'} · {product.reviewCount || reviews.length} reviews</small></div>
           <p className="detail-description">{product.description}</p>
           <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong>{canShop && <button onClick={handleAdd}>{added ? 'Added to bag ✓' : 'Add to bag →'}</button>}</div>
           <div className="detail-notes"><span>In stock</span><span>Free delivery over $75</span><span>30-day returns</span></div>
         </div>
+      </section>
+      <section className="reviews-section">
+        <div className="reviews-heading"><div><p className="eyebrow">Customer notes</p><h2>Reviews</h2></div><span>{reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</span></div>
+        {canShop && <form className="review-form" onSubmit={submitReview}>
+          <label>Rating<select value={reviewRating} onChange={(event) => setReviewRating(event.target.value)}><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fine</option><option value="2">2 - Needs work</option><option value="1">1 - Poor</option></select></label>
+          <label>Your review<textarea value={reviewComment} onChange={(event) => setReviewComment(event.target.value)} placeholder="What did you think?" maxLength="1000" required /></label>
+          <button type="submit" disabled={reviewSubmitting}>{reviewSubmitting ? 'Publishing...' : 'Publish review'} <span aria-hidden="true">→</span></button>
+          {reviewError && <p className="form-error">{reviewError}</p>}
+        </form>}
+        <div className="review-list">{reviews.map((review) => <article className="review-item" key={review._id}><div className="review-meta"><strong>{review.user?.name || review.user?.email || 'Customer'}</strong><span>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span></div><p>{review.comment}</p></article>)}{!reviews.length && <p className="review-empty">No reviews yet. Be the first to share your experience.</p>}</div>
       </section>
     </main>
   );

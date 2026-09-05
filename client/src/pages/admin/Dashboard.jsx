@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axios';
+import { productCategories } from '../../constants/productCategories';
 import './Dashboard.css';
 
-const emptyForm = { name: '', price: '', description: '', category: 'Essentials', imageUrl: '' };
+const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '' };
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -68,7 +69,7 @@ export default function AdminDashboard() {
         <form className="admin-product-form" onSubmit={handleSubmit}>
           <input name="name" placeholder="Product name" value={form.name} onChange={handleChange} required />
           <input name="price" type="number" min="0" step="0.01" placeholder="Price" value={form.price} onChange={handleChange} required />
-          <select name="category" value={form.category} onChange={handleChange}><option>Essentials</option><option>Home</option><option>Accessories</option><option>Stationery</option><option>Apparel</option><option>Wellness</option><option>Kitchen</option></select>
+          <select name="category" value={form.category} onChange={handleChange}>{productCategories.map((category) => <option key={category}>{category}</option>)}</select>
           <input name="imageUrl" type="url" placeholder="Image URL" value={form.imageUrl} onChange={handleChange} />
           <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
           <div className="admin-form-actions"><button type="submit">{editingId ? 'Save changes' : 'Create product'} <span>→</span></button>{editingId && <button type="button" className="admin-cancel" onClick={() => { setEditingId(null); setForm(emptyForm); }}>Cancel</button>}</div>
