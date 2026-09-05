@@ -52,11 +52,11 @@ export default function App() {
           {/* customer side */}
           <Route
             path="/products"
-            element={<PrivateRoute role="customer"><ProductList onAddToCart={addToCart} /></PrivateRoute>}
+            element={<PrivateRoute roles={["customer", "retailer"]}><ProductList onAddToCart={addToCart} /></PrivateRoute>}
           />
           <Route
             path="/products/:productId"
-            element={<PrivateRoute role="customer"><ProductDetail onAddToCart={addToCart} /></PrivateRoute>}
+            element={<PrivateRoute roles={["customer", "retailer"]}><ProductDetail onAddToCart={addToCart} /></PrivateRoute>}
           />
           <Route
             path="/cart"

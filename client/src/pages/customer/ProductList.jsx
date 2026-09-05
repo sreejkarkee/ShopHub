@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import axios from '../../api/axios';
 import ProductCard from '../../components/ProductCard';
+import { useAuth } from '../../contexts/AuthContext';
 import './ProductList.css';
 
 const starterProducts = [
@@ -20,6 +21,8 @@ const removedDemoProducts = ['Test Market Bag', 'Studio Ceramic Set'];
 const withoutRemovedDemos = (items) => items.filter((product) => !removedDemoProducts.includes(product.name));
 
 export default function ProductList({ onAddToCart }) {
+  const { user } = useAuth();
+  const canShop = user?.role === 'customer';
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem('products');
     return withoutRemovedDemos(saved ? [...starterProducts, ...JSON.parse(saved)] : starterProducts);
@@ -52,7 +55,7 @@ export default function ProductList({ onAddToCart }) {
       </section>
       <div className="results-row"><strong>{visibleProducts.length} results</strong><span>Curated for everyday living</span></div>
       <div className="product-grid">
-        {visibleProducts.map((product) => <ProductCard key={product._id} product={product} onAddToCart={onAddToCart} />)}
+        {visibleProducts.map((product) => <ProductCard key={product._id} product={product} onAddToCart={onAddToCart} canShop={canShop} />)}
       </div>
       {!visibleProducts.length && <div className="empty-state"><h2>No pieces found</h2><p>Try a different search or category.</p></div>}
     </main>

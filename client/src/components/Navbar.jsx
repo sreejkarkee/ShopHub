@@ -26,10 +26,12 @@ export default function Navbar() {
           </>
         )}
 
-        {user?.role === 'customer' && (
+        {(user?.role === 'customer' || user?.role === 'retailer') && (
           <>
             <Link className={location.pathname === '/products' ? 'active' : ''} to="/products">Discover</Link>
+            {user.role === 'customer' && (
             <Link className={location.pathname === '/cart' ? 'active' : ''} to="/cart">Cart</Link>
+            )}
           </>
         )}
 

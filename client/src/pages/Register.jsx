@@ -11,6 +11,7 @@ export default function Register() {
     role: "customer",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,7 +23,7 @@ export default function Register() {
     try {
       await axios.post("/register", form);
       navigate("/login");
-    } catch (err) {
+    } catch {
       setError("Registration failed. Try a different email.");
     }
   };
@@ -48,14 +49,14 @@ export default function Register() {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         /></label>
         <label>Password
-        <input
+        <div className="password-field"><input
           name="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
           required
-        /></label>
+        /><button type="button" className="password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? "Hide" : "Show"}</button></div></label>
         <label>I'm joining as
         <select name="role" value={form.role} onChange={handleChange}>
           <option value="customer">Customer</option>

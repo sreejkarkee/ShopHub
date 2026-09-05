@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from '../../api/axios';
+import { useAuth } from '../../contexts/AuthContext';
 import './ProductDetail.css';
 
 export default function ProductDetail({ onAddToCart }) {
+  const { user } = useAuth();
+  const canShop = user?.role === 'customer';
   const { productId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,7 +46,7 @@ export default function ProductDetail({ onAddToCart }) {
           <h1>{product.name}</h1>
           <div className="detail-rating">★ ★ ★ ★ ★ <small>{product.rating || '4.7'} · {product.reviews || 0} reviews</small></div>
           <p className="detail-description">{product.description}</p>
-          <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong><button onClick={handleAdd}>{added ? 'Added to bag ✓' : 'Add to bag →'}</button></div>
+          <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong>{canShop && <button onClick={handleAdd}>{added ? 'Added to bag ✓' : 'Add to bag →'}</button>}</div>
           <div className="detail-notes"><span>In stock</span><span>Free delivery over $75</span><span>30-day returns</span></div>
         </div>
       </section>

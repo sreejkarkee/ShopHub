@@ -6,6 +6,7 @@ import "./Login.css";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function Login() {
       } else {
         navigate("/products");
       }
-    } catch (err) {
+    } catch {
       setError("Invalid email or password.");
     }
   };
@@ -34,7 +35,7 @@ export default function Login() {
       <p className="eyebrow">Your account</p><h2>Sign in to ShopHub</h2><p className="form-hint">Pick up where you left off.</p>
       <form onSubmit={handleSubmit}>
         <label>Email<input type="email" required placeholder="you@example.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
-        <label>Password<input type="password" placeholder="Your password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></label>
+        <label>Password<div className="password-field"><input type={showPassword ? "text" : "password"} placeholder="Your password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /><button type="button" className="password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? "Hide" : "Show"}</button></div></label>
         <button type="submit">Continue <span aria-hidden="true">→</span></button>
       </form>
       {error && <p className="form-error">{error}</p>}<p className="form-footer">New to ShopHub? <a href="/register">Create an account</a></p>
