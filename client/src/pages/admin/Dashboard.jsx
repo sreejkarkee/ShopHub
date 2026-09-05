@@ -10,6 +10,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [purchases, setPurchases] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState('');
@@ -24,10 +25,12 @@ export default function AdminDashboard() {
       .catch(() => setStats(null));
     loadProducts();
     loadUsers();
+    loadPurchases();
   }, []);
 
   const loadProducts = () => axios.get('/products').then((res) => setProducts(res.data)).catch(() => setProducts([]));
   const loadUsers = () => axios.get('/admin/users', { headers }).then((res) => setUsers(res.data)).catch(() => setUsers([]));
+  const loadPurchases = () => axios.get('/orders/admin-orders', { headers }).then((res) => setPurchases(res.data)).catch(() => setPurchases([]));
   const handleChange = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -83,6 +86,19 @@ export default function AdminDashboard() {
       <section className="admin-users">
         <div className="dashboard-heading"><div><p className="eyebrow">Account control</p><h2>Users</h2></div><span className="admin-product-count">{users.length} accounts</span></div>
         <div className="admin-user-list">{users.map((user) => <article className="admin-user-row" key={user._id}><div><strong>{user.name || 'Unnamed user'}</strong><small>{user.email} · {user.role}</small></div><button onClick={() => deleteUser(user)}>Remove</button></article>)}{!users.length && <p className="sales-empty">No customer or retailer accounts available.</p>}</div>
+      </section>
+      <section className="admin-purchases">
+        <div className="dashboard-heading"><div><p className="eyebrow">Order history</p><h2>Customer purchases</h2></div><span className="admin-product-count">{purchases.length} items sold</span></div>
+        <div className="admin-purchase-list">
+          {purchases.map((purchase) => (
+            <article className="admin-purchase-row" key={purchase._id}>
+              <div><strong>{purchase.productName}</strong><small>{purchase.customer?.name || 'Unnamed customer'} · {purchase.customer?.email || 'No email'}</small></div>
+              <div><small>{new Date(purchase.createdAt).toLocaleDateString()}</small><strong className={`admin-purchase-status ${purchase.status}`}>{purchase.status}</strong></div>
+              <strong>${Number(purchase.amount).toFixed(2)}</strong>
+            </article>
+          ))}
+          {!purchases.length && <p className="sales-empty">No customer purchases yet.</p>}
+        </div>
       </section>
     </main>
   );

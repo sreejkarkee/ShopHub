@@ -80,3 +80,23 @@ export const adminStats = async (req, res) => {
     res.status(500).json({ message: 'Unable to load stats' });
   }
 };
+
+export const adminOrders = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('customer', 'name email')
+      .sort({ createdAt: -1 });
+    const purchases = orders.flatMap((order) => order.items.map((item) => ({
+      _id: `${order._id}-${item._id}`,
+      orderId: order._id,
+      customer: order.customer,
+      productName: item.productName,
+      amount: item.amount,
+      status: order.status,
+      createdAt: order.createdAt,
+    })));
+    res.json(purchases);
+  } catch {
+    res.status(500).json({ message: 'Unable to load purchase history' });
+  }
+};
