@@ -10,7 +10,8 @@
 .login-container input, .login-container select { background: #fbfaf7; border: 1px solid #d1d4cb; border-radius: 2px; color: #17211b; padding: 13px; }
 .login-container input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #9a5b35;
+  box-shadow: 0 0 0 3px rgba(154, 91, 53, .1);
 }
 
 .login-container button {
