@@ -8,6 +8,7 @@ export default function ProductCard({ product, onAddToCart, isInCart = false, ca
   const rating = Number(product.rating || 0);
   const reviewCount = Array.isArray(product.reviews) ? product.reviews.length : Number(product.reviewCount || product.reviews || 0);
   const stars = rating ? `${'★'.repeat(Math.round(rating))}${'☆'.repeat(5 - Math.round(rating))}` : '☆☆☆☆☆';
+  const soldOut = product.soldOut === true;
 
   const handleAdd = () => {
     if (added || isInCart) return;
@@ -19,6 +20,7 @@ export default function ProductCard({ product, onAddToCart, isInCart = false, ca
     <article className="product-card" onClick={() => navigate(`/products/${product._id}`, { state: { product } })}>
       <div className="product-card-image">
         {product.badge && <span className="product-badge">{product.badge}</span>}
+        {soldOut && <span className="product-badge sold-out-badge">Sold out</span>}
         {product.imageUrl ? (
           <img src={product.imageUrl} alt={product.name} />
         ) : (
@@ -31,7 +33,7 @@ export default function ProductCard({ product, onAddToCart, isInCart = false, ca
         {product.retailer && <small className="product-card-retailer">By {product.retailer.name || product.retailer.email}</small>}
         <div className="product-card-rating"><span aria-label={rating ? `${rating} out of 5 stars` : 'No ratings yet'}>{stars}</span> <small>{rating ? rating.toFixed(1) : 'No rating'} · {reviewCount} reviews</small></div>
         <p className="product-card-description">{product.description}</p>
-        <div className="product-card-footer"><p className="product-card-price">${Number(product.price).toFixed(2)}</p>{canShop && <button className={added || isInCart ? 'product-card-btn added' : 'product-card-btn'} onClick={(event) => { event.stopPropagation(); handleAdd(); }} aria-label={added || isInCart ? `${product.name} added to bag` : `Add ${product.name} to bag`} disabled={added || isInCart}><span>{added || isInCart ? 'Added to bag' : 'Add to bag'}</span><span aria-hidden="true">{added || isInCart ? '✓' : '+'}</span></button>}</div>
+        <div className="product-card-footer"><p className="product-card-price">${Number(product.price).toFixed(2)}</p>{canShop && <button className={soldOut ? 'product-card-btn sold-out' : added || isInCart ? 'product-card-btn added' : 'product-card-btn'} onClick={(event) => { event.stopPropagation(); handleAdd(); }} aria-label={soldOut ? `${product.name} is sold out` : added || isInCart ? `${product.name} added to bag` : `Add ${product.name} to bag`} disabled={soldOut || added || isInCart}><span>{soldOut ? 'Sold out' : added || isInCart ? 'Added to bag' : 'Add to bag'}</span><span aria-hidden="true">{soldOut ? '—' : added || isInCart ? '✓' : '+'}</span></button>}</div>
       </div>
     </article>
   );

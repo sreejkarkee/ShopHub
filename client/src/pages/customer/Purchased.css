@@ -1,0 +1,17 @@
+.purchased-page h1 { font-size: clamp(42px, 6vw, 68px); margin-bottom: 36px; }
+.purchased-state { color: #6b756e; padding: 30px 0; }
+.purchase-list { border-top: 1px solid #d9d4ca; }
+.purchase-order { border-bottom: 1px solid #d9d4ca; padding: 22px 0; }
+.purchase-order header { align-items: end; display: grid; gap: 20px; grid-template-columns: 1fr 1fr auto; }
+.purchase-order header div { display: grid; gap: 5px; }
+.purchase-order header span { color: #899188; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.purchase-order header strong { color: #17211b; font-size: 15px; }
+.purchase-order header > strong { font-size: 18px; }
+.purchase-status { color: #3c5140 !important; text-transform: capitalize; }
+.purchase-order ul { list-style: none; margin: 18px 0 0; padding: 0; }
+.purchase-order li { color: #6b756e; display: flex; justify-content: space-between; padding: 8px 0; }
+.purchase-order li strong { color: #17211b; font-weight: 500; }
+@media (max-width: 620px) {
+  .purchase-order header { align-items: start; grid-template-columns: 1fr 1fr; }
+  .purchase-order header > strong { grid-column: 1 / -1; }
+}

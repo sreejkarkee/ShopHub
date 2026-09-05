@@ -17,6 +17,7 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
   const [reviewComment, setReviewComment] = useState('');
   const [reviewError, setReviewError] = useState('');
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const soldOut = product?.soldOut === true;
 
   useEffect(() => {
     if (product) return undefined;
@@ -71,8 +72,8 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
           <h1>{product.name}</h1>
           <div className="detail-rating">{product.rating ? `${'★'.repeat(Math.round(product.rating))}${'☆'.repeat(5 - Math.round(product.rating))}` : '☆☆☆☆☆'} <small>{product.rating ? Number(product.rating).toFixed(1) : 'No rating'} · {product.reviewCount || reviews.length} reviews</small></div>
           <p className="detail-description">{product.description}</p>
-          <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong>{canShop && <button onClick={handleAdd} disabled={added || isInCart(product._id)}>{added || isInCart(product._id) ? 'Added to bag ✓' : 'Add to bag →'}</button>}</div>
-          <div className="detail-notes"><span>{product.condition || 'New'} · {product.quality || 'New'}</span><span>In stock</span><span>Free delivery over $75</span><span>30-day returns</span></div>
+          <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong>{canShop && <button onClick={handleAdd} disabled={soldOut || added || isInCart(product._id)}>{soldOut ? 'Sold out' : added || isInCart(product._id) ? 'Added to bag ✓' : 'Add to bag →'}</button>}</div>
+          <div className="detail-notes"><span>{product.condition || 'New'} · {product.quality || 'New'}</span><span>{soldOut ? 'Sold out' : 'In stock'}</span><span>Free delivery over $75</span><span>30-day returns</span></div>
         </div>
       </section>
       <section className="reviews-section">

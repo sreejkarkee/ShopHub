@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import ProductList from './pages/customer/ProductList';
 import ProductDetail from './pages/customer/ProductDetail';
 import Cart from './pages/customer/Cart';
+import Purchased from './pages/customer/Purchased';
 import Dashboard from './pages/retailer/Dashboard';
 import AddProduct from './pages/retailer/AddProduct';
 import AdminDashboard from './pages/admin/Dashboard';
@@ -62,6 +63,10 @@ export default function App() {
           <Route
             path="/cart"
             element={<PrivateRoute role="customer"><Cart cartItems={cartItems} onRemove={removeFromCart} onCheckout={clearCart} /></PrivateRoute>}
+          />
+          <Route
+            path="/purchased"
+            element={<PrivateRoute role="customer"><Purchased /></PrivateRoute>}
           />
 
           {/* retailer side */}

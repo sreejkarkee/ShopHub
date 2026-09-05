@@ -4,15 +4,21 @@ import axios from '../../api/axios';
 
 export default function Cart({ cartItems = [], onRemove, onCheckout }) {
   const [message, setMessage] = useState('');
+  const [checkingOut, setCheckingOut] = useState(false);
   const total = cartItems.reduce((sum, item) => sum + Number(item.price), 0);
 
   const handleCheckout = async () => {
+    if (checkingOut || !cartItems.length) return;
+    setCheckingOut(true);
+    setMessage('');
     try {
       await axios.post('/orders', { productIds: cartItems.map((item) => item._id) }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
       onCheckout();
       setMessage('Order placed successfully. Thank you for shopping thoughtfully.');
     } catch {
       setMessage('Checkout is unavailable for these local demo products.');
+    } finally {
+      setCheckingOut(false);
     }
   };
 
@@ -31,7 +37,7 @@ export default function Cart({ cartItems = [], onRemove, onCheckout }) {
             ))}
           </ul>
           <div className="cart-summary"><span>Subtotal</span><strong>${total.toFixed(2)}</strong></div>
-          <button className="cart-checkout-btn" onClick={handleCheckout}>Continue to checkout <span>→</span></button>
+          <button className="cart-checkout-btn" onClick={handleCheckout} disabled={checkingOut}>{checkingOut ? 'Processing...' : 'Continue to checkout'} <span>→</span></button>
           {message && <p className="form-success">{message}</p>}
         </>
       )}

@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'https://shophub-1-bcrf.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5001/api',
 });

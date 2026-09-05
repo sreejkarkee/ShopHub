@@ -41,14 +41,6 @@
   position: relative;
 }
 
-.product-card-image::after {
-  background: linear-gradient(180deg, transparent 60%, rgba(23, 33, 27, 0.14));
-  content: '';
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-}
-
 .product-card-image img {
   height: 100%;
   object-fit: cover;
@@ -116,6 +108,8 @@
   margin: 0 5px 2px 0;
   width: 5px;
 }
+.sold-out-badge { background: #d99a67; }
+.product-card-btn.sold-out { background: #e3e0d8; color: #6b756e; cursor: not-allowed; }
 
 .product-card-condition {
   align-items: flex-end;

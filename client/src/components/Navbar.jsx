@@ -30,7 +30,7 @@ export default function Navbar() {
           <>
             <Link className={location.pathname === '/products' ? 'active' : ''} to="/products">Discover</Link>
             {user.role === 'customer' && (
-            <Link className={location.pathname === '/cart' ? 'active' : ''} to="/cart">Cart</Link>
+            <><Link className={location.pathname === '/cart' ? 'active' : ''} to="/cart">Cart</Link><Link className={location.pathname === '/purchased' ? 'active' : ''} to="/purchased">Purchased</Link></>
             )}
           </>
         )}
