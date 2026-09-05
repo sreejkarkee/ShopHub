@@ -159,6 +159,25 @@
   font-style: italic;
 }
 
+.retailer-products {
+  margin-top: 54px;
+}
+
+.retailer-products .dashboard-heading {
+  margin-bottom: 18px;
+}
+
+.product-count {
+  color: #899188;
+  font-size: 12px;
+}
+
+.retailer-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 600px) {
   .metric-strip {

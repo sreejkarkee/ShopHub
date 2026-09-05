@@ -124,6 +124,13 @@
   margin: 10px 0 6px;
 }
 
+.product-card-retailer {
+  color: #899188;
+  display: block;
+  font-size: 11px;
+  margin-bottom: 7px;
+}
+
 .product-card-rating {
   align-items: center;
   color: #9a5b35;

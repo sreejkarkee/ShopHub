@@ -12,6 +12,17 @@ export const listProducts = async (req, res) => {
   }
 };
 
+export const listMyProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ retailer: req.user.id })
+      .populate('retailer', 'name email role')
+      .sort({ createdAt: -1 });
+    res.json(products);
+  } catch {
+    res.status(500).json({ message: 'Unable to load your products' });
+  }
+};
+
 export const addReview = async (req, res) => {
   const rating = Number(req.body.rating);
   const comment = req.body.comment?.trim();
@@ -67,6 +78,7 @@ export const updateProduct = async (req, res) => {
       { new: true, runValidators: true },
     );
     if (!product) return res.status(404).json({ message: 'Product not found' });
+    await product.populate('retailer', 'name email role');
     res.json(product);
   } catch {
     res.status(400).json({ message: 'Product could not be updated' });

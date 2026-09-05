@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axios';
+import ProductCard from '../../components/ProductCard';
 import './Dashboard.css';
 
 export default function Dashboard() {
   const [sales, setSales] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     axios
@@ -12,6 +14,12 @@ export default function Dashboard() {
       })
       .then((res) => setSales(res.data))
       .catch(() => setSales([]));
+    axios
+      .get('/products/mine', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+      .then((res) => setProducts(res.data))
+      .catch(() => setProducts([]));
   }, []);
 
   const total = sales.reduce((sum, s) => sum + s.amount, 0);
@@ -28,6 +36,11 @@ export default function Dashboard() {
         ))}
         {!sales.length && <li className="sales-empty">Your first sale will appear here.</li>}
       </ul>
+      <section className="retailer-products">
+        <div className="dashboard-heading"><div><p className="eyebrow">Your catalog</p><h2>Added products</h2></div><span className="product-count">{products.length} listed</span></div>
+        <div className="retailer-product-grid">{products.map((product) => <ProductCard key={product._id} product={product} canShop={false} />)}</div>
+        {!products.length && <p className="sales-empty">You have not added any products yet.</p>}
+      </section>
     </main>
   );
 }
