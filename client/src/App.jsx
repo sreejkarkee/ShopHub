@@ -20,10 +20,32 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const addToCart = (product) => {
+  const addToCart = (product, quantity = 1) => {
+    const nextQuantity = Math.max(1, Number(quantity) || 1);
     setCartItems((items) => {
-      if (items.some((item) => String(item._id) === String(product._id))) return items;
-      const next = [...items, product];
+      const normalized = items.map((item) => ({ ...item, quantity: Math.max(1, Number(item.quantity) || 1) }));
+      const existingIndex = normalized.findIndex((item) => String(item._id) === String(product._id));
+      const next = [...normalized];
+
+      if (existingIndex >= 0) {
+        next[existingIndex] = {
+          ...next[existingIndex],
+          quantity: next[existingIndex].quantity + nextQuantity,
+        };
+      } else {
+        next.push({ ...product, quantity: nextQuantity });
+      }
+
+      localStorage.setItem('cart', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const updateCartQuantity = (index, quantity) => {
+    setCartItems((items) => {
+      const next = [...items];
+      const nextQuantity = Math.max(1, Number(quantity) || 1);
+      next[index] = { ...next[index], quantity: nextQuantity };
       localStorage.setItem('cart', JSON.stringify(next));
       return next;
     });
@@ -62,7 +84,7 @@ export default function App() {
           />
           <Route
             path="/cart"
-            element={<PrivateRoute role="customer"><Cart cartItems={cartItems} onRemove={removeFromCart} onCheckout={clearCart} /></PrivateRoute>}
+            element={<PrivateRoute role="customer"><Cart cartItems={cartItems} onRemove={removeFromCart} onUpdateQuantity={updateCartQuantity} onCheckout={clearCart} /></PrivateRoute>}
           />
           <Route
             path="/purchased"

@@ -2,17 +2,27 @@ import './Cart.css';
 import { useState } from 'react';
 import axios from '../../api/axios';
 
-export default function Cart({ cartItems = [], onRemove, onCheckout }) {
+export default function Cart({ cartItems = [], onRemove, onUpdateQuantity, onCheckout }) {
   const [message, setMessage] = useState('');
   const [checkingOut, setCheckingOut] = useState(false);
-  const total = cartItems.reduce((sum, item) => sum + Number(item.price), 0);
+  const total = cartItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity || 1), 0);
 
   const handleCheckout = async () => {
     if (checkingOut || !cartItems.length) return;
     setCheckingOut(true);
     setMessage('');
+
     try {
-      await axios.post('/orders', { productIds: cartItems.map((item) => item._id) }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+      const remoteItems = cartItems.filter((item) => !String(item._id || '').startsWith('local-'));
+      if (remoteItems.length) {
+        await axios.post('/orders', {
+          items: remoteItems.map((item) => ({
+            productId: item._id,
+            quantity: Number(item.quantity) || 1,
+          })),
+        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+      }
+
       onCheckout();
       setMessage('Order placed successfully. Thank you for shopping thoughtfully.');
     } catch {
@@ -23,7 +33,7 @@ export default function Cart({ cartItems = [], onRemove, onCheckout }) {
   };
 
   return (
-    <main className="page-shell cart"><p className="eyebrow">Your selection</p><h1>Your bag</h1>
+    <main className="page-shell cart"><p className="eyebrow">Your selection</p><h1>Your cart</h1>
       {cartItems.length === 0 ? (
         <p className="cart-empty">Your cart is empty.</p>
       ) : (
@@ -31,12 +41,18 @@ export default function Cart({ cartItems = [], onRemove, onCheckout }) {
           <ul className="cart-list">
             {cartItems.map((item, i) => (
               <li key={i} className="cart-item">
-                <div><strong>{item.name}</strong><small>{item.category || 'ShopHub edit'}</small></div><span>${Number(item.price).toFixed(2)}</span>
+                <div><strong>{item.name}</strong><small>{item.category || 'General'}</small></div>
+                <div className="cart-item-controls">
+                  <button type="button" onClick={() => onUpdateQuantity(i, Math.max(1, (Number(item.quantity) || 1) - 1))}>-</button>
+                  <span>{Number(item.quantity) || 1}</span>
+                  <button type="button" onClick={() => onUpdateQuantity(i, (Number(item.quantity) || 1) + 1)}>+</button>
+                </div>
+                <span>Rs.{(Number(item.price) * Number(item.quantity || 1)).toFixed(2)}</span>
                 <button onClick={() => onRemove(i)}>Remove</button>
               </li>
             ))}
           </ul>
-          <div className="cart-summary"><span>Subtotal</span><strong>${total.toFixed(2)}</strong></div>
+          <div className="cart-summary"><span>Subtotal</span><strong>Rs.{total.toFixed(2)}</strong></div>
           <button className="cart-checkout-btn" onClick={handleCheckout} disabled={checkingOut}>{checkingOut ? 'Processing...' : 'Continue to checkout'} <span>→</span></button>
           {message && <p className="form-success">{message}</p>}
         </>

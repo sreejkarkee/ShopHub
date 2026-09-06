@@ -66,7 +66,7 @@ export default function AdminDashboard() {
   return (
     <main className="page-shell dashboard-page">
       <p className="eyebrow">ShopHub operations</p><h1>Keep the marketplace moving.</h1>
-      <section className="metric-strip"><div><span>Total sales</span><strong>${stats?.totalSales || '—'}</strong></div><div><span>Access</span><strong>Admin</strong></div><div><span>System</span><strong className="status-dot">Online</strong></div></section>
+      <section className="metric-strip"><div><span>Total sales</span><strong>Rs.{stats?.totalSales || '—'}</strong></div><div><span>Access</span><strong>Admin</strong></div><div><span>System</span><strong className="status-dot">Online</strong></div></section>
       {!stats && <p className="form-hint">Live metrics will appear when the admin service is connected.</p>}
       <section className="admin-products">
         <div className="dashboard-heading"><div><p className="eyebrow">Catalog control</p><h2>Products</h2></div><span className="admin-product-count">{products.length} listed</span></div>
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
           <div className="admin-form-actions"><button type="submit">{editingId ? 'Save changes' : 'Create product'} <span>→</span></button>{editingId && <button type="button" className="admin-cancel" onClick={() => { setEditingId(null); setForm(emptyForm); }}>Cancel</button>}</div>
         </form>
         {message && <p className="form-success">{message}</p>}
-        <div className="admin-product-list">{products.map((product) => <article className="admin-product-row" key={product._id}><div>{product.imageUrl && <img src={product.imageUrl} alt="" />}<div><strong>{product.name}</strong><small>{product.category} · {product.condition || 'New'} · {product.quality || 'New'} · ${Number(product.price).toFixed(2)}</small><small className="admin-product-creator">Added by: {product.retailer?.name || product.retailer?.email || 'Admin'}{product.retailer?.role && ` (${product.retailer.role})`}</small></div></div><div className="admin-product-actions"><button onClick={() => editProduct(product)}>Edit</button><button onClick={() => deleteProduct(product._id)}>Delete</button></div></article>)}{!products.length && <p className="sales-empty">No server products available.</p>}</div>
+        <div className="admin-product-list">{products.map((product) => <article className="admin-product-row" key={product._id}><div>{product.imageUrl && <img src={product.imageUrl} alt="" />}<div><strong>{product.name}</strong><small>{product.category} · {product.condition || 'New'} · {product.quality || 'New'} · Rs.{Number(product.price).toFixed(2)}</small><small className="admin-product-creator">Added by: {product.retailer?.name || product.retailer?.email || 'Admin'}{product.retailer?.role && ` (${product.retailer.role})`}</small></div></div><div className="admin-product-actions"><button onClick={() => editProduct(product)}>Edit</button><button onClick={() => deleteProduct(product._id)}>Delete</button></div></article>)}{!products.length && <p className="sales-empty">No server products available.</p>}</div>
       </section>
       <section className="admin-users">
         <div className="dashboard-heading"><div><p className="eyebrow">Account control</p><h2>Users</h2></div><span className="admin-product-count">{users.length} accounts</span></div>
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
             <article className="admin-purchase-row" key={purchase._id}>
               <div><strong>{purchase.productName}</strong><small>{purchase.customer?.name || 'Unnamed customer'} · {purchase.customer?.email || 'No email'}</small></div>
               <div><small>{new Date(purchase.createdAt).toLocaleDateString()}</small><strong className={`admin-purchase-status ${purchase.status}`}>{purchase.status}</strong></div>
-              <strong>${Number(purchase.amount).toFixed(2)}</strong>
+              <strong>Rs.{Number(purchase.amount).toFixed(2)}</strong>
             </article>
           ))}
           {!purchases.length && <p className="sales-empty">No customer purchases yet.</p>}

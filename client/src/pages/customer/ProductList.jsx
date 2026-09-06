@@ -29,15 +29,15 @@ export default function ProductList({ onAddToCart, isInCart }) {
   return (
     <main className="page-shell catalog-page">
       <section className="catalog-intro">
-        <div><p className="eyebrow">The ShopHub edit</p><h1>Objects with a point of view.</h1><p className="intro-copy">A small collection of useful, beautiful things from independent retailers.</p></div>
-        <div className="catalog-note"><strong>{products.length}</strong><span>curated pieces<br />available today</span></div>
+        <div><p className="eyebrow">Popular picks</p><h1>Shop quality essentials for everyday living.</h1><p className="intro-copy">Discover reliable home, lifestyle, and everyday items from trusted retailers.</p></div>
+        <div className="catalog-note"><strong>{products.length}</strong><span>items<br />available now</span></div>
       </section>
-      <section className="shop-benefits"><span>Free delivery over $75</span><span>Independent makers</span><span>Easy 30-day returns</span><span>Secure checkout</span></section>
+      <section className="shop-benefits"><span>Free delivery over Rs. 75</span><span>Independent makers</span><span>Easy 30-day returns</span><span>Secure checkout</span></section>
       <section className="catalog-toolbar">
         <label className="search-field"><span aria-hidden="true">⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search the collection" /></label>
         <div className="filter-list">{categories.map((item) => <button key={item} className={category === item ? 'filter active' : 'filter'} onClick={() => setCategory(item)}>{item}</button>)}</div>
       </section>
-      <div className="results-row"><strong>{visibleProducts.length} results</strong><span>Curated for everyday living</span></div>
+      <div className="results-row"><strong>{visibleProducts.length} results</strong><span>Fresh finds for your home and routine</span></div>
       <div className="product-grid">
         {visibleProducts.map((product) => <ProductCard key={product._id} product={product} onAddToCart={onAddToCart} isInCart={isInCart(product._id)} canShop={canShop} />)}
       </div>

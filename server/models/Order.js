@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema({
     retailer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     productName: { type: String, required: true },
     amount: { type: Number, required: true, min: 0 },
+    quantity: { type: Number, required: true, min: 1, default: 1 },
   }],
   total: { type: Number, required: true, min: 0 },
   status: { type: String, enum: ['placed', 'fulfilled', 'cancelled'], default: 'placed' },

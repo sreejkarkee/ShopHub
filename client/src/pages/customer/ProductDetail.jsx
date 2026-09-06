@@ -13,6 +13,7 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
   const [product, setProduct] = useState(location.state?.product || null);
   const [loading, setLoading] = useState(!location.state?.product);
   const [added, setAdded] = useState(() => isInCart(product?._id));
+  const [quantity, setQuantity] = useState(1);
   const [reviewRating, setReviewRating] = useState('5');
   const [reviewComment, setReviewComment] = useState('');
   const [reviewError, setReviewError] = useState('');
@@ -29,8 +30,8 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
   }, [product, productId]);
 
   const handleAdd = () => {
-    if (added || isInCart(product._id)) return;
-    onAddToCart(product);
+    if (soldOut || added || isInCart(product._id)) return;
+    onAddToCart(product, quantity);
     setAdded(true);
   };
 
@@ -72,8 +73,19 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
           <h1>{product.name}</h1>
           <div className="detail-rating">{product.rating ? `${'★'.repeat(Math.round(product.rating))}${'☆'.repeat(5 - Math.round(product.rating))}` : '☆☆☆☆☆'} <small>{product.rating ? Number(product.rating).toFixed(1) : 'No rating'} · {product.reviewCount || reviews.length} reviews</small></div>
           <p className="detail-description">{product.description}</p>
-          <div className="detail-purchase"><strong>${Number(product.price).toFixed(2)}</strong>{canShop && <button onClick={handleAdd} disabled={soldOut || added || isInCart(product._id)}>{soldOut ? 'Sold out' : added || isInCart(product._id) ? 'Added to cart ✓' : 'Add to cart →'}</button>}</div>
-          <div className="detail-notes"><span>{product.condition || 'New'} · {product.quality || 'New'}</span><span>{soldOut ? 'Sold out' : 'In stock'}</span><span>Free delivery over $75</span><span>30-day returns</span></div>
+          <div className="detail-purchase">
+            <strong>Rs.{Number(product.price).toFixed(2)}</strong>
+            {canShop && (
+              <div className="detail-purchase-actions">
+                <label className="quantity-picker">
+                  <span>Qty</span>
+                  <input type="number" min="1" step="1" value={quantity} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value) || 1))} />
+                </label>
+                <button onClick={handleAdd} disabled={soldOut || added || isInCart(product._id)}>{soldOut ? 'Sold out' : added || isInCart(product._id) ? 'Added to cart ✓' : 'Add to cart →'}</button>
+              </div>
+            )}
+          </div>
+          <div className="detail-notes"><span>{product.condition || 'New'} · {product.quality || 'New'}</span><span>{soldOut ? 'Sold out' : 'In stock'}</span><span>Free delivery over Rs. 75</span><span>30-day returns</span></div>
         </div>
       </section>
       <section className="reviews-section">

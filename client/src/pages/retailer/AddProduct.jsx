@@ -5,20 +5,22 @@ import { productConditions, productQualities } from '../../constants/productCond
 import './AddProduct.css';
 
 export default function AddProduct() {
-  const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '', condition: productConditions[0], quality: productQualities[0] };
+  const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '', condition: productConditions[0], quality: productQualities[0], quantity: 1 };
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const value = e.target.type === 'number' ? Number(e.target.value) : e.target.value;
+    setForm({ ...form, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const product = { ...form, _id: `local-${Date.now()}`, price: Number(form.price) };
+    const quantity = Math.max(1, Number(form.quantity) || 1);
+    const product = { ...form, _id: `local-${Date.now()}`, price: Number(form.price), quantity };
     let publishedRemotely = false;
     try {
-      await axios.post('/products', form, {
+      await axios.post('/products', { ...form, quantity }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       publishedRemotely = true;
@@ -37,10 +39,11 @@ export default function AddProduct() {
         <label>Product name<input name="name" placeholder="e.g. Linen market bag" value={form.name} onChange={handleChange} required /></label>
         <div className="form-row"><label>Price<input name="price" type="number" min="0" step="0.01" placeholder="0.00" value={form.price} onChange={handleChange} required /></label><label>Category<select name="category" value={form.category} onChange={handleChange}>{productCategories.map((category) => <option key={category}>{category}</option>)}</select></label></div>
         <div className="form-row"><label>Condition<select name="condition" value={form.condition} onChange={handleChange}>{productConditions.map((condition) => <option key={condition}>{condition}</option>)}</select></label><label>Quality<select name="quality" value={form.quality} onChange={handleChange}>{productQualities.map((quality) => <option key={quality}>{quality}</option>)}</select></label></div>
+        <div className="form-row"><label>Quantity<input name="quantity" type="number" min="1" step="1" value={form.quantity} onChange={handleChange} required /></label></div>
         <label>Description<textarea name="description" placeholder="What makes this piece worth choosing?" value={form.description} onChange={handleChange} required /></label>
         <label>Product image URL<input name="imageUrl" type="url" placeholder="https://example.com/product-image.jpg" value={form.imageUrl} onChange={handleChange} /></label>
         <button type="submit">Publish product <span>→</span></button>
-      </form><aside className="product-preview"><p className="preview-label">Storefront preview</p><div className="preview-image">{form.imageUrl ? <img src={form.imageUrl} alt="Product preview" /> : <span>{form.category.slice(0, 1)}</span>}</div><span className="preview-category">{form.category}</span><h2>{form.name || 'Your product name'}</h2><p>{form.description || 'A short description will appear here.'}</p><strong>${Number(form.price || 0).toFixed(2)}</strong></aside></div>
+      </form><aside className="product-preview"><p className="preview-label">Storefront preview</p><div className="preview-image">{form.imageUrl ? <img src={form.imageUrl} alt="Product preview" /> : <span>{form.category.slice(0, 1)}</span>}</div><span className="preview-category">{form.category}</span><h2>{form.name || 'Your product name'}</h2><p>{form.description || 'A short description will appear here.'}</p><strong>Rs.{Number(form.price || 0).toFixed(2)}</strong></aside></div>
       {message && <p className="form-success">{message}</p>}
     </main>
   );

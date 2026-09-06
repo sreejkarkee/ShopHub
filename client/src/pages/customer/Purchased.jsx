@@ -32,13 +32,13 @@ export default function Purchased() {
             <header>
               <div><span>Order placed</span><strong>{new Date(order.createdAt).toLocaleDateString()}</strong></div>
               <div><span>Status</span><strong className="purchase-status">{order.status}</strong></div>
-              <strong>${Number(order.total).toFixed(2)}</strong>
+              <strong>Rs.{Number(order.total).toFixed(2)}</strong>
             </header>
             <ul>
               {order.items.map((item) => (
                 <li key={item._id || item.product}>
                   <span>{item.productName}</span>
-                  <strong>${Number(item.amount).toFixed(2)}</strong>
+                  <strong>Rs.{Number(item.amount).toFixed(2)}</strong>
                 </li>
               ))}
             </ul>

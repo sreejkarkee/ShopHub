@@ -9,6 +9,7 @@ export default function ProductCard({
   canShop = true,
 }) {
   const [added, setAdded] = useState(isInCart);
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const rating = Number(product.rating || 0);
   const reviewCount = Array.isArray(product.reviews)
@@ -20,8 +21,8 @@ export default function ProductCard({
   const soldOut = product.soldOut === true;
 
   const handleAdd = () => {
-    if (added || isInCart) return;
-    onAddToCart(product);
+    if (soldOut || added || isInCart) return;
+    onAddToCart(product, quantity);
     setAdded(true);
   };
 
@@ -76,41 +77,53 @@ export default function ProductCard({
         <p className="product-card-description">{product.description}</p>
         <div className="product-card-footer">
           <p className="product-card-price">
-            ${Number(product.price).toFixed(2)}
+            Rs.{Number(product.price).toFixed(2)}
           </p>
           {canShop && (
-            <button
-              className={
-                soldOut
-                  ? "product-card-btn sold-out"
-                  : added || isInCart
-                    ? "product-card-btn added"
-                    : "product-card-btn"
-              }
-              onClick={(event) => {
-                event.stopPropagation();
-                handleAdd();
-              }}
-              aria-label={
-                soldOut
-                  ? `${product.name} is sold out`
-                  : added || isInCart
-                    ? `${product.name} added to cart`
-                    : `Add ${product.name} to cart`
-              }
-              disabled={soldOut || added || isInCart}
-            >
-              <span>
-                {soldOut
-                  ? "Sold out"
-                  : added || isInCart
-                    ? "Added to cart"
-                    : "Add to cart"}
-              </span>
-              <span aria-hidden="true">
-                {soldOut ? "—" : added || isInCart ? "✓" : "+"}
-              </span>
-            </button>
+            <div className="product-card-actions" onClick={(event) => event.stopPropagation()}>
+              <label className="quantity-picker">
+                <span>Qty</span>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={quantity}
+                  onChange={(event) => setQuantity(Math.max(1, Number(event.target.value) || 1))}
+                />
+              </label>
+              <button
+                className={
+                  soldOut
+                    ? "product-card-btn sold-out"
+                    : added || isInCart
+                      ? "product-card-btn added"
+                      : "product-card-btn"
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleAdd();
+                }}
+                aria-label={
+                  soldOut
+                    ? `${product.name} is sold out`
+                    : added || isInCart
+                      ? `${product.name} added to cart`
+                      : `Add ${product.name} to cart`
+                }
+                disabled={soldOut || added || isInCart}
+              >
+                <span>
+                  {soldOut
+                    ? "Sold out"
+                    : added || isInCart
+                      ? "Added to cart"
+                      : "Add to cart"}
+                </span>
+                <span aria-hidden="true">
+                  {soldOut ? "—" : added || isInCart ? "✓" : "+"}
+                </span>
+              </button>
+            </div>
           )}
         </div>
       </div>

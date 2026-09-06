@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema({
   imageUrl: { type: String, default: '' },
   condition: { type: String, enum: ['New', 'Used'], default: 'New' },
   quality: { type: String, enum: ['New', 'Like New', 'Very Good', 'Good', 'Acceptable'], default: 'New' },
+  quantity: { type: Number, default: 1, min: 1 },
   soldOut: { type: Boolean, default: false },
   retailer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   rating: { type: Number, default: 0, min: 0, max: 5 },

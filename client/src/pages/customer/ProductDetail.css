@@ -65,21 +65,41 @@
   border-bottom: 1px solid #d9d4ca;
   border-top: 1px solid #d9d4ca;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  gap: 16px;
   padding: 18px 0;
 }
 .detail-purchase strong {
   color: #9a5b35;
   font-size: 24px;
+  white-space: nowrap;
+}
+.detail-purchase-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
 }
 .detail-purchase button {
   background: #17211b;
   border: 0;
+  border-radius: 999px;
   color: #f5f2ec;
-  padding: 12px 16px;
+  font-weight: 600;
+  min-height: 42px;
+  padding: 12px 18px;
+  white-space: nowrap;
 }
 .detail-purchase button:hover {
   background: #3c5140;
+}
+.detail-purchase .quantity-picker {
+  padding: 7px 9px;
+}
+.detail-purchase .quantity-picker input {
+  width: 32px;
 }
 .detail-notes {
   color: #899188;
