@@ -19,10 +19,11 @@ export default function ProductCard({
     ? `${"★".repeat(Math.round(rating))}${"☆".repeat(5 - Math.round(rating))}`
     : "☆☆☆☆☆";
   const soldOut = product.soldOut === true;
+  const availableQuantity = Math.max(1, Number(product.quantity) || 1);
 
   const handleAdd = () => {
-    if (soldOut || added || isInCart) return;
-    onAddToCart(product, quantity);
+    if (soldOut || added || isInCart || !availableQuantity) return;
+    onAddToCart(product, Math.min(quantity, availableQuantity));
     setAdded(true);
   };
 
@@ -86,9 +87,10 @@ export default function ProductCard({
                 <input
                   type="number"
                   min="1"
+                  max={availableQuantity}
                   step="1"
                   value={quantity}
-                  onChange={(event) => setQuantity(Math.max(1, Number(event.target.value) || 1))}
+                  onChange={(event) => setQuantity(Math.min(availableQuantity, Math.max(1, Number(event.target.value) || 1)))}
                 />
               </label>
               <button
@@ -110,7 +112,7 @@ export default function ProductCard({
                       ? `${product.name} added to cart`
                       : `Add ${product.name} to cart`
                 }
-                disabled={soldOut || added || isInCart}
+                disabled={soldOut || added || isInCart || !availableQuantity}
               >
                 <span>
                   {soldOut

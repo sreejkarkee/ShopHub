@@ -2,6 +2,8 @@ import './Cart.css';
 import { useState } from 'react';
 import axios from '../../api/axios';
 
+const isRemoteProduct = (item) => /^[a-f\d]{24}$/i.test(String(item?._id || ''));
+
 export default function Cart({ cartItems = [], onRemove, onUpdateQuantity, onCheckout }) {
   const [message, setMessage] = useState('');
   const [checkingOut, setCheckingOut] = useState(false);
@@ -13,7 +15,7 @@ export default function Cart({ cartItems = [], onRemove, onUpdateQuantity, onChe
     setMessage('');
 
     try {
-      const remoteItems = cartItems.filter((item) => !String(item._id || '').startsWith('local-'));
+      const remoteItems = cartItems.filter(isRemoteProduct);
       if (remoteItems.length) {
         await axios.post('/orders', {
           items: remoteItems.map((item) => ({
@@ -26,7 +28,7 @@ export default function Cart({ cartItems = [], onRemove, onUpdateQuantity, onChe
       onCheckout();
       setMessage('Order placed successfully. Thank you for shopping thoughtfully.');
     } catch {
-      setMessage('Checkout is unavailable for these local demo products.');
+      setMessage('We could not place the order right now. Please try again.');
     } finally {
       setCheckingOut(false);
     }
@@ -45,7 +47,7 @@ export default function Cart({ cartItems = [], onRemove, onUpdateQuantity, onChe
                 <div className="cart-item-controls">
                   <button type="button" onClick={() => onUpdateQuantity(i, Math.max(1, (Number(item.quantity) || 1) - 1))}>-</button>
                   <span>{Number(item.quantity) || 1}</span>
-                  <button type="button" onClick={() => onUpdateQuantity(i, (Number(item.quantity) || 1) + 1)}>+</button>
+                  <button type="button" disabled={(Number(item.quantity) || 1) >= Math.max(1, Number(item.quantityAvailable || item.quantity) || 1)} onClick={() => onUpdateQuantity(i, (Number(item.quantity) || 1) + 1)}>+</button>
                 </div>
                 <span>Rs.{(Number(item.price) * Number(item.quantity || 1)).toFixed(2)}</span>
                 <button onClick={() => onRemove(i)}>Remove</button>

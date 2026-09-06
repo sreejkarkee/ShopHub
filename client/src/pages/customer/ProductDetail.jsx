@@ -19,6 +19,7 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
   const [reviewError, setReviewError] = useState('');
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const soldOut = product?.soldOut === true;
+  const availableQuantity = Math.max(1, Number(product?.quantity) || 1);
 
   useEffect(() => {
     if (product) return undefined;
@@ -30,8 +31,8 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
   }, [product, productId]);
 
   const handleAdd = () => {
-    if (soldOut || added || isInCart(product._id)) return;
-    onAddToCart(product, quantity);
+    if (soldOut || added || isInCart(product._id) || !availableQuantity) return;
+    onAddToCart(product, Math.min(quantity, availableQuantity));
     setAdded(true);
   };
 
@@ -79,13 +80,13 @@ export default function ProductDetail({ onAddToCart, isInCart }) {
               <div className="detail-purchase-actions">
                 <label className="quantity-picker">
                   <span>Qty</span>
-                  <input type="number" min="1" step="1" value={quantity} onChange={(event) => setQuantity(Math.max(1, Number(event.target.value) || 1))} />
+                  <input type="number" min="1" max={availableQuantity} step="1" value={quantity} onChange={(event) => setQuantity(Math.min(availableQuantity, Math.max(1, Number(event.target.value) || 1)))} />
                 </label>
-                <button onClick={handleAdd} disabled={soldOut || added || isInCart(product._id)}>{soldOut ? 'Sold out' : added || isInCart(product._id) ? 'Added to cart ✓' : 'Add to cart →'}</button>
+                <button onClick={handleAdd} disabled={soldOut || added || isInCart(product._id) || !availableQuantity}>{soldOut || !availableQuantity ? 'Sold out' : added || isInCart(product._id) ? 'Added to cart ✓' : 'Add to cart →'}</button>
               </div>
             )}
           </div>
-          <div className="detail-notes"><span>{product.condition || 'New'} · {product.quality || 'New'}</span><span>{soldOut ? 'Sold out' : 'In stock'}</span><span>Free delivery over Rs. 75</span><span>30-day returns</span></div>
+          <div className="detail-notes"><span>{product.condition || 'New'} · {product.quality || 'New'}</span><span>{soldOut || !availableQuantity ? 'Sold out' : `${availableQuantity} available`}</span><span>Free delivery over Rs. 75</span><span>30-day returns</span></div>
         </div>
       </section>
       <section className="reviews-section">

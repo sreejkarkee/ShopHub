@@ -22,22 +22,26 @@ export default function App() {
 
   const addToCart = (product, quantity = 1) => {
     const nextQuantity = Math.max(1, Number(quantity) || 1);
+    const availableQuantity = Math.max(1, Number(product.quantity) || 1);
     setCartItems((items) => {
       const normalized = items.map((item) => ({ ...item, quantity: Math.max(1, Number(item.quantity) || 1) }));
       const existingIndex = normalized.findIndex((item) => String(item._id) === String(product._id));
       const next = [...normalized];
 
       if (existingIndex >= 0) {
+        const currentQuantity = next[existingIndex].quantity;
         next[existingIndex] = {
           ...next[existingIndex],
-          quantity: next[existingIndex].quantity + nextQuantity,
+          quantityAvailable: availableQuantity,
+          quantity: Math.min(availableQuantity, currentQuantity + nextQuantity),
         };
       } else {
-        next.push({ ...product, quantity: nextQuantity });
+        next.push({ ...product, quantityAvailable: availableQuantity, quantity: Math.min(availableQuantity, nextQuantity) });
       }
 
-      localStorage.setItem('cart', JSON.stringify(next));
-      return next;
+      const validItems = next.filter((item) => Number(item.quantity) > 0);
+      localStorage.setItem('cart', JSON.stringify(validItems));
+      return validItems;
     });
   };
 
@@ -45,7 +49,8 @@ export default function App() {
     setCartItems((items) => {
       const next = [...items];
       const nextQuantity = Math.max(1, Number(quantity) || 1);
-      next[index] = { ...next[index], quantity: nextQuantity };
+      const availableQuantity = Math.max(1, Number(next[index]?.quantityAvailable) || Number(next[index]?.quantity) || 1);
+      next[index] = { ...next[index], quantity: Math.min(availableQuantity, nextQuantity) };
       localStorage.setItem('cart', JSON.stringify(next));
       return next;
     });

@@ -21,7 +21,7 @@ export const createOrder = async (req, res) => {
     return res.status(400).json({ message: 'Your cart is empty' });
   }
 
-  const claimedIds = [];
+  const claimedItems = [];
   try {
     const products = await Product.find({ _id: { $in: orderItems.map((item) => item.productId) } });
     const productMap = new Map(products.map((product) => [String(product._id), product]));
@@ -43,10 +43,10 @@ export const createOrder = async (req, res) => {
           $inc: { quantity: -item.quantity },
           $set: { soldOut: Number(product.quantity) - item.quantity <= 0 },
         },
-        { new: true },
+        { returnDocument: 'after' },
       );
       if (!claimedProduct) throw new Error('Product is no longer available');
-      claimedIds.push(claimedProduct._id);
+      claimedItems.push({ productId: claimedProduct._id, quantity: item.quantity });
     }
 
     const items = orderItems.map((item) => {
@@ -63,15 +63,11 @@ export const createOrder = async (req, res) => {
     const order = await Order.create({ customer: req.user.id, items, total });
     res.status(201).json(order);
   } catch (error) {
-    if (claimedIds.length) {
-      await Product.updateMany({ _id: { $in: claimedIds } }, { $set: { soldOut: false } });
-      const restored = await Product.find({ _id: { $in: claimedIds } });
-      for (const product of restored) {
-        const previousQuantity = Number(product.quantity) || 0;
-        if (previousQuantity >= 0) {
-          // no-op: no per-order rollback information is retained in this minimal flow
-        }
-      }
+    if (claimedItems.length) {
+      await Promise.all(claimedItems.map(({ productId, quantity }) => Product.findByIdAndUpdate(
+        productId,
+        { $inc: { quantity }, $set: { soldOut: false } },
+      )));
     }
     res.status(error.message === 'Product is no longer available' ? 409 : 400).json({ message: 'Order could not be placed' });
   }
@@ -102,7 +98,7 @@ export const retailerSales = async (req, res) => {
   try {
     const orders = await Order.find({ 'items.retailer': req.user.id }).sort({ createdAt: -1 });
     const sales = orders.flatMap((order) => order.items
-      .filter((item) => item.retailer.toString() === req.user.id)
+      .filter((item) => item.retailer && item.retailer.toString() === req.user.id)
       .map((item) => ({ _id: `${order._id}-${item._id}`, productName: item.productName, amount: Number(item.amount) * Number(item.quantity || 1), quantity: item.quantity || 1, status: order.status })));
     res.json(sales);
   } catch {
