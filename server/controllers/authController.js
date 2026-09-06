@@ -5,7 +5,8 @@ import User from '../models/User.js';
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, password, role } = req.body;
+  const email = req.body.email?.trim().toLowerCase();
 
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Invalid email format' });
@@ -25,14 +26,15 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { password } = req.body;
+  const email = req.body.email?.trim().toLowerCase();
 
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Invalid email format' });
   }
 
   // Hardcoded admin check — no DB lookup needed
-  if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+  if (email === process.env.ADMIN_EMAIL?.trim().toLowerCase() && password === process.env.ADMIN_PASSWORD) {
     const token = jwt.sign(
       { id: 'admin', role: 'admin' },
       process.env.JWT_SECRET,
@@ -42,7 +44,7 @@ export const login = async (req, res) => {
   }
 
   // Normal customer/retailer login
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: { $regex: `^${email}$`, $options: 'i' } });
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(400).json({ message: 'Invalid credentials' });
   }

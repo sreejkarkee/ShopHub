@@ -29,5 +29,5 @@ app.get('/api/admin/stats', protect, requireRole('admin'), adminStats);
 app.get('/api/admin/users', protect, requireRole('admin'), listUsers);
 app.delete('/api/admin/users/:id', protect, requireRole('admin'), deleteUser);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

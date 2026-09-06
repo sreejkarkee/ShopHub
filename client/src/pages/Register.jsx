@@ -43,6 +43,9 @@ export default function Register() {
         <label>Email
         <input
           type="email"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck="false"
           required
           placeholder="Email"
           value={form.email}
