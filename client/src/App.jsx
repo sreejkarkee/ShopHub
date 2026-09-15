@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { BrowserRouter, Link, Navigate, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
@@ -10,6 +10,7 @@ import ProductList from './pages/customer/ProductList';
 import ProductDetail from './pages/customer/ProductDetail';
 import Cart from './pages/customer/Cart';
 import Purchased from './pages/customer/Purchased';
+import Orders from './pages/customer/Orders';
 import Dashboard from './pages/retailer/Dashboard';
 import AddProduct from './pages/retailer/AddProduct';
 import AdminDashboard from './pages/admin/Dashboard';
@@ -19,6 +20,21 @@ export default function App() {
     const saved = localStorage.getItem('cart');
     return saved ? JSON.parse(saved) : [];
   });
+
+  const [toast, setToast] = useState('');
+  const toastTimer = useRef(null);
+
+  // Keep the navbar cart badge in sync with cart changes.
+  useEffect(() => {
+    window.dispatchEvent(new Event('cart-updated'));
+  }, [cartItems]);
+
+  useEffect(() => {
+    if (!toast) return;
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(''), 2600);
+    return () => clearTimeout(toastTimer.current);
+  }, [toast]);
 
   const addToCart = (product, quantity = 1) => {
     const nextQuantity = Math.max(1, Number(quantity) || 1);
@@ -41,6 +57,7 @@ export default function App() {
 
       const validItems = next.filter((item) => Number(item.quantity) > 0);
       localStorage.setItem('cart', JSON.stringify(validItems));
+      setToast(`Added ${product.name} × ${nextQuantity} to cart`);
       return validItems;
     });
   };
@@ -73,6 +90,12 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Navbar />
+        {toast && (
+          <div className="cart-toast" role="status">
+            <span>{toast}</span>
+            <Link to="/cart">View cart →</Link>
+          </div>
+        )}
         <Routes>
           <Route path="/" element={<Navigate to="/products" replace />} />
           <Route path="/login" element={<Login />} />
@@ -94,6 +117,10 @@ export default function App() {
           <Route
             path="/purchased"
             element={<PrivateRoute role="customer"><Purchased /></PrivateRoute>}
+          />
+          <Route
+            path="/orders"
+            element={<PrivateRoute role="customer"><Orders /></PrivateRoute>}
           />
 
           {/* retailer side */}

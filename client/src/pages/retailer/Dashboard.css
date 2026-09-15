@@ -159,6 +159,21 @@
   font-style: italic;
 }
 
+.sales-error { background: #fdecea; color: #9c2b2b; border: 1px solid #f3c1c1; border-radius: 8px; padding: 10px 14px; font-size: 13px; }
+.sale-row { gap: 16px; }
+.sale-info { align-items: flex-start !important; }
+.sale-side { align-items: flex-end !important; gap: 8px !important; }
+.ship-badge { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; width: fit-content; }
+.ship-placed { background: #ece9e0; color: #5c665c; }
+.ship-shipped { background: #e3edfb; color: #2b4a8b; }
+.ship-out_for_delivery { background: #fef0d8; color: #9a5b35; }
+.ship-delivered { background: #dce8d4; color: #2f6b2f; }
+.ship-cancelled { background: #fdecea; color: #9c2b2b; }
+.ship-btn { background: #17211b; color: #fff; border: none; border-radius: 7px; padding: 9px 14px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.ship-btn:hover:not(:disabled) { background: #3c5140; }
+.ship-btn:disabled { opacity: .45; cursor: default; }
+.ship-done { font-size: 12px; font-weight: 700; color: #2f6b2f; }
+
 .retailer-products {
   margin-top: 54px;
 }

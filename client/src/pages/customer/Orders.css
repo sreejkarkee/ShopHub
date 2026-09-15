@@ -1,0 +1,17 @@
+.orders-page { max-width: 860px; }
+.orders-page h1 { font-size: clamp(34px, 5vw, 54px); margin-bottom: 28px; }
+.orders-empty { color: #64748b; }
+.orders-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.order-card { background: #fffefa; border: 1px solid #e3e0d8; border-radius: 12px; padding: 20px 22px; }
+.order-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.order-head strong { font-size: 15px; }
+.order-total { margin-left: auto; font-weight: 800; color: #9a5b35; }
+.pay-pill { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 4px 10px; border-radius: 999px; }
+.pay-pill.paid { background: #dce8d4; color: #2f6b2f; }
+.pay-pill.pending { background: #fef0d8; color: #9a5b35; }
+.order-item { border-top: 1px solid #eee9dd; padding: 12px 0 4px; }
+.order-item-top { display: flex; justify-content: space-between; font-size: 14px; }
+.order-item-top small { color: #899188; text-transform: capitalize; }
+.track { display: flex; gap: 8px; margin: 10px 0 8px; }
+.track .dot { width: 34px; height: 6px; border-radius: 999px; background: #e7e2d6; }
+.track .dot.on { background: #2f6b2f; }

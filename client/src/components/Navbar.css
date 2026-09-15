@@ -63,6 +63,21 @@
 }
 .navbar-links a.active::after, .navbar-links a:hover::after { transform: scaleX(1); }
 
+.cart-badge {
+  background: #d99a67;
+  border-radius: 999px;
+  color: #17211b;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  margin-left: 6px;
+  min-width: 20px;
+  padding: 4px 6px;
+  text-align: center;
+  vertical-align: 1px;
+}
+
 .navbar-logout {
   background: transparent;
   color: #d99a67;

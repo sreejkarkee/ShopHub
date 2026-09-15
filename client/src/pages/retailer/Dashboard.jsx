@@ -7,19 +7,34 @@ import './Dashboard.css';
 
 const emptyForm = { name: '', price: '', description: '', category: productCategories[0], imageUrl: '', condition: productConditions[0], quality: productQualities[0] };
 
+const NEXT_ACTION = {
+  placed: { label: 'Mark shipped', next: 'shipped' },
+  shipped: { label: 'Mark out for delivery', next: 'out_for_delivery' },
+  out_for_delivery: { label: 'Mark delivered', next: 'delivered' },
+};
+
+const STATUS_LABEL = {
+  placed: 'Placed',
+  shipped: 'Shipped',
+  out_for_delivery: 'Out for delivery',
+  delivered: 'Delivered',
+  cancelled: 'Cancelled',
+};
+
+const authHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
+
 export default function Dashboard() {
   const [sales, setSales] = useState([]);
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState('');
-  const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
+  const [updating, setUpdating] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     axios
-      .get('/orders/my-sales', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      })
+      .get('/orders/my-sales', { headers: authHeaders() })
       .then((res) => setSales(res.data))
       .catch(() => setSales([]));
     axios
@@ -30,7 +45,10 @@ export default function Dashboard() {
       .catch(() => setProducts([]));
   }, []);
 
-  const total = sales.reduce((sum, s) => sum + s.amount, 0);
+  const total = sales.reduce((sum, s) => sum + Number(s.amount || 0), 0);
+  const toShip = sales.filter((s) => (s.shipmentStatus || 'placed') === 'placed').length;
+  const inTransit = sales.filter((s) => ['shipped', 'out_for_delivery'].includes(s.shipmentStatus)).length;
+
   const handleChange = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const startEditing = (product) => {
     setEditingId(product._id);
@@ -41,23 +59,42 @@ export default function Dashboard() {
   const saveProduct = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.put(`/products/${editingId}`, form, { headers });
+      const { data } = await axios.put(`/products/${editingId}`, form, { headers: authHeaders() });
       setProducts((items) => items.map((item) => item._id === editingId ? data : item));
       cancelEditing();
       setMessage('Product updated.');
-    } catch (error) {
-      setMessage(error.response?.data?.message || 'Product could not be updated.');
+    } catch (err) {
+      setMessage(err.response?.data?.message || 'Product could not be updated.');
     }
   };
   const removeProduct = async (id) => {
     if (!window.confirm('Delete this product?')) return;
     try {
-      await axios.delete(`/products/${id}`, { headers });
+      await axios.delete(`/products/${id}`, { headers: authHeaders() });
       setProducts((items) => items.filter((item) => item._id !== id));
       if (editingId === id) cancelEditing();
       setMessage('Product deleted.');
-    } catch (error) {
-      setMessage(error.response?.data?.message || 'Product could not be deleted.');
+    } catch (err) {
+      setMessage(err.response?.data?.message || 'Product could not be deleted.');
+    }
+  };
+
+  const advanceStatus = async (sale) => {
+    const action = NEXT_ACTION[sale.shipmentStatus || 'placed'];
+    if (!action) return;
+    setUpdating(sale._id);
+    setError('');
+    try {
+      await axios.patch(
+        `/orders/${sale.orderId}/items/${sale.itemId}/shipment`,
+        { shipmentStatus: action.next },
+        { headers: authHeaders() }
+      );
+      setSales((prev) => prev.map((s) => (s._id === sale._id ? { ...s, shipmentStatus: action.next, status: action.next } : s)));
+    } catch (err) {
+      setError(err.response?.data?.message || 'Could not update status');
+    } finally {
+      setUpdating('');
     }
   };
 
@@ -65,12 +102,40 @@ export default function Dashboard() {
     <main className="page-shell dashboard-page">
       <p className="eyebrow">Retailer studio</p>
       <h1>Your shop, at a glance.</h1>
-      <section className="metric-strip"><div><span>Sales to date</span><strong>Rs.{total.toFixed(2)}</strong></div><div><span>Orders</span><strong>{sales.length}</strong></div><div><span>Status</span><strong className="status-dot">Live</strong></div></section>
+      <section className="metric-strip"><div><span>Sales to date</span><strong>Rs.{total.toFixed(2)}</strong></div><div><span>To ship</span><strong>{toShip}</strong></div><div><span>In transit</span><strong>{inTransit}</strong></div></section>
       <div className="dashboard-heading"><div><p className="eyebrow">Activity</p><h2>Recent sales</h2></div><a href="/retailer/add-product">Add a product →</a></div>
+
+      {error && <p className="sales-error">{error}</p>}
+
       <ul className="sales-list">
-        {sales.map((s) => (
-          <li key={s._id}><div><strong>{s.productName}</strong><small>Order completed</small></div><b>Rs.{Number(s.amount).toFixed(2)}</b></li>
-        ))}
+        {sales.map((s) => {
+          const ship = s.shipmentStatus || 'placed';
+          const action = NEXT_ACTION[ship];
+          return (
+            <li key={s._id} className="sale-row">
+              <div className="sale-info">
+                <strong>{s.productName}{s.quantity > 1 ? ` × ${s.quantity}` : ''}</strong>
+                <small>Order …{String(s.orderId || '').slice(-6)} · {s.paymentStatus === 'paid' ? 'Paid' : 'Unpaid'}</small>
+                <span className={`ship-badge ship-${ship}`}>{STATUS_LABEL[ship] || ship}</span>
+              </div>
+              <div className="sale-side">
+                <b>Rs.{Number(s.amount).toFixed(2)}</b>
+                {action ? (
+                  <button
+                    className="ship-btn"
+                    onClick={() => advanceStatus(s)}
+                    disabled={updating === s._id || s.paymentStatus !== 'paid'}
+                    title={s.paymentStatus !== 'paid' ? 'Waiting for customer payment' : action.label}
+                  >
+                    {updating === s._id ? 'Updating…' : action.label + ' →'}
+                  </button>
+                ) : (
+                  <span className="ship-done">✓ {STATUS_LABEL[ship]}</span>
+                )}
+              </div>
+            </li>
+          );
+        })}
         {!sales.length && <li className="sales-empty">Your first sale will appear here.</li>}
       </ul>
       <section className="retailer-products">
