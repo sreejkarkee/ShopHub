@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
 
 :root {
-  --bg: #b6edaf;
+  --bg: #f7f3ee;
   --bg-soft: #eef3ed;
   --panel: #fffdf9;
   --panel-strong: #f5f2ec;
@@ -14,50 +14,29 @@
   --accent-soft: #d99a67;
   --success: #5d7656;
   --shadow: 0 18px 38px rgba(23, 33, 27, 0.08);
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   color: var(--ink);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
-* {
-  box-sizing: border-box;
-}
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
   background:
-    linear-gradient(rgba(23, 33, 27, 0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 33, 27, 0.012) 1px, transparent 1px),
+    linear-gradient(rgba(23, 33, 27, .018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 33, 27, .012) 1px, transparent 1px),
     var(--bg);
   background-size: 28px 28px;
   color: var(--ink);
 }
-#root {
-  min-height: 100vh;
-}
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-button {
-  cursor: pointer;
-}
-a {
-  color: inherit;
-}
-img {
-  display: block;
-  max-width: 100%;
-}
-:focus-visible {
-  outline: 2px solid var(--accent-soft);
-  outline-offset: 3px;
-}
+#root { min-height: 100vh; }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+img { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
