@@ -10,8 +10,8 @@
   animation: card-in 0.45s ease both;
   background: #fffefa;
   border: 1px solid #ded9cf;
-  border-radius: 6px;
-  box-shadow: 0 3px 0 rgba(23, 33, 27, 0.035);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(23, 33, 27, 0.04);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -21,8 +21,8 @@
 }
 
 .product-card:hover {
-  box-shadow: 0 18px 32px rgba(40, 48, 39, 0.14);
-  transform: translateY(-5px);
+  box-shadow: 0 18px 32px rgba(40, 48, 39, 0.12);
+  transform: translateY(-4px);
 }
 
 .product-card:nth-child(2) { animation-delay: 0.05s; }
@@ -34,7 +34,7 @@
 .product-card-image {
   align-items: center;
   aspect-ratio: 1 / 0.8;
-  background: #dfe7da;
+  background: linear-gradient(135deg, #e8eee5, #d9e3d6);
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -78,7 +78,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 9px 10px 9px;
+  padding: 14px 14px 13px;
 }
 
 .product-card-meta {
@@ -135,7 +135,7 @@
   font-size: clamp(14px, 1.4vw, 16px);
   font-weight: 600;
   line-height: 1.16;
-  margin: 10px 0 6px;
+  margin: 12px 0 6px;
 }
 
 .product-card-retailer {

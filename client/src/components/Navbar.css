@@ -5,18 +5,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px max(24px, calc((100% - 1180px) / 2));
-  background: rgba(23, 33, 27, 0.96);
+  padding: 16px max(24px, calc((100% - 1180px) / 2));
+  background: rgba(23, 33, 27, 0.94);
   color: #f5f2ec;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
 }
 
 .navbar-brand {
   align-items: center;
   display: flex;
   gap: 9px;
-  font-size: 1.25rem;
+  font-family: "Playfair Display", serif;
+  font-size: 1.35rem;
   font-weight: 700;
   color: white;
   text-decoration: none;
@@ -24,20 +25,20 @@
 }
 .brand-mark {
   align-items: center;
-  background: #d99a67;
+  background: #e2a06b;
   border-radius: 50%;
   color: #17211b;
   display: inline-flex;
   font-family: 'Playfair Display', serif;
-  height: 28px;
+  height: 30px;
   justify-content: center;
-  width: 28px;
+  width: 30px;
 }
 
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.45rem;
   flex-wrap: wrap;
 }
 
@@ -45,7 +46,8 @@
   position: relative;
   color: #bec7be;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
   transition: color 0.18s ease;
 }
 .navbar-links a.active, .navbar-links a:hover { color: #f5f2ec; }
@@ -82,11 +84,20 @@
   background: transparent;
   color: #d99a67;
   border: 1px solid #536057;
-  padding: 0.5rem 0.9rem;
+  padding: 0.55rem 1rem;
   border-radius: 999px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.2s ease;
+}
+@media (max-width: 760px) {
+  .navbar {
+    align-items: flex-start;
+  }
+  .navbar-links {
+    justify-content: flex-end;
+    gap: 10px 14px;
+  }
 }
 
 .navbar-logout:hover {
